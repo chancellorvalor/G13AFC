@@ -724,7 +724,7 @@ not supported by PyWikipediaBot!"""
         else:
             # Make sure we re-raise an exception we got on an earlier attempt
             if hasattr(self, '_redirarg') and not get_redirect:
-                raise IsRedirectPage, self._redirarg
+                raise IsRedirectPage(self._redirarg)
             elif hasattr(self, '_getexception'):
                 if self._getexception == IsRedirectPage and get_redirect:
                     pass
@@ -753,7 +753,7 @@ not supported by PyWikipediaBot!"""
             except NoPage:
                 self._getexception = NoPage
                 raise
-            except IsRedirectPage, arg:
+            except IsRedirectPage as arg:
                 self._getexception = IsRedirectPage
                 self._redirarg = arg
                 if not get_redirect:
@@ -2093,12 +2093,12 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
         """Encode an ascii string/Unicode string to the site's encoding"""
         try:
             return arg.encode(self.site().encoding())
-        except UnicodeDecodeError, e:
+        except UnicodeDecodeError as e:
             # happens when arg is a non-ascii bytestring :
             # when reencoding bytestrings, python decodes first to ascii
             e.reason += ' (cannot convert input %s string to unicode)' % msgForError
             raise e
-        except UnicodeEncodeError, e:
+        except UnicodeEncodeError as e:
             # happens when arg is unicode
             e.reason += ' (cannot convert %s to wiki encoding %s)' % (msgForError, self.site().encoding())
             raise e
@@ -2181,7 +2181,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                 response, data = query.GetData(params, self.site(), sysop=sysop, back_response = True)
                 if isinstance(data,basestring):
                     raise KeyError
-            except httplib.BadStatusLine, line:
+            except httplib.BadStatusLine as line:
                 raise PageNotSaved('Bad status line: %s' % line.line)
             except ServerError:
                 exception(tb=True)
@@ -2423,7 +2423,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                         continue
                     # Squid error 503
                     raise ServerError(response.code)
-            except httplib.BadStatusLine, line:
+            except httplib.BadStatusLine as line:
                 raise PageNotSaved('Bad status line: %s' % line.line)
             except ServerError:
                 exception(tb=True)
@@ -2874,7 +2874,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
             self.get()
         except NoPage:
             raise
-        except IsRedirectPage, err:
+        except IsRedirectPage as err:
             # otherwise it will return error pages with " inside.
             target = err[0].replace('&amp;quot;', '"')
 
@@ -4137,7 +4137,7 @@ class DataPage(Page):
                                                sysop=sysop, back_response=True)
                 if isinstance(data,basestring):
                     raise KeyError
-            except httplib.BadStatusLine, line:
+            except httplib.BadStatusLine as line:
                 raise PageNotSaved('Bad status line: %s' % line.line)
             except ServerError:
                 exception(tb=True)
@@ -4237,7 +4237,7 @@ class DataPage(Page):
                                                sysop=sysop, back_response=True)
                 if isinstance(data,basestring):
                     raise KeyError
-            except httplib.BadStatusLine, line:
+            except httplib.BadStatusLine as line:
                 raise PageNotSaved('Bad status line: %s' % line.line)
             except ServerError:
                 exception(tb=True)
@@ -5632,7 +5632,7 @@ def url2unicode(title, site, site2 = None):
             t = title.encode(enc)
             t = urllib.unquote(t)
             return unicode(t, enc)
-        except UnicodeError, ex:
+        except UnicodeError as ex:
             if not firstException:
                 firstException = ex
             pass
@@ -5662,7 +5662,7 @@ def html2unicode(text, ignore = []):
     # also entities that might be named entities.
     entityR = re.compile(
         r'&(?:amp;)?(#(?P<decimal>\d+)|#x(?P<hex>[0-9a-fA-F]+)|(?P<name>[A-Za-z]+));')
-	
+        
     ignore.extend((38,     # Ampersand (&amp;)
                    39,     # Bugzilla 24093
                    60,     # Less than (&lt;)
@@ -6467,7 +6467,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             else:
                 return self.postData(address, data, sysop=sysop,
                                     cookies=self.cookies(sysop = sysop))
-        except socket.error, e:
+        except socket.error as e:
             raise ServerError(e)
 
     def postData(self, address, data,
@@ -6515,7 +6515,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
                 break
             except KeyboardInterrupt:
                 raise
-            except urllib2.HTTPError, e:
+            except urllib2.HTTPError as e:
                 if e.code in [401, 404]:
                     raise PageNotFound(u'Page %s could not be retrieved. Check your family file ?' % url)
                 # just check for HTTP Status 500 (Internal Server Error)?
@@ -9476,7 +9476,7 @@ def exception(msg=None, decoder=None, newline=True, tb=False, **kwargs):
       ...
     or alternatively:
       ...
-      except Exception, e:
+      except Exception as e:
           pywikibot.exception(e)
       ...
     """
@@ -9557,7 +9557,7 @@ def async_put():
         try:
             page.put(newtext, comment, watchArticle, minorEdit, force)
             error = None
-        except Exception, error:
+        except Exception as error:
             pass
         if callback is not None:
             callback(page, error)
