@@ -1,0 +1,10 @@
+[project]
+name = "repl-nix-workspace"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.11"
+dependencies = [
+    "httpsproxy-urllib2>=1.0",
+    "mysqlclient>=2.2.7",
+    "python-dateutil>=2.9.0.post0",
+]
