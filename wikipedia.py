@@ -147,7 +147,7 @@ import warnings
 import unicodedata
 import xmlreader
 import externals     # allow imports from externals
-externals.check_setup('BeautifulSoup.py')
+externals.check_setup('BeautifulSoup.py'))
 from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup, SoupStrainer
 import weakref
 import logging, logging.handlers
@@ -159,7 +159,7 @@ try:
         # http://pypi.python.org/pypi/python-json
         raise ImportError
 except ImportError:
-    externals.check_setup('simplejson')
+    externals.check_setup('simplejson'))
     import simplejson as json
 # Splitting the bot into library parts
 from pywikibot.support import *
@@ -186,12 +186,12 @@ USER_AGENT_FORMAT = '{script}/r{version[rev]} Pywikipediabot/1.0'
 SaxError = xml.sax._exceptions.SAXParseException
 
 # Pre-compile re expressions
-reNamespace = re.compile("^(.+?) *: *(.*)$")
+reNamespace = re.compile("^(.+?) *: *(.*)$"))
 Rwatch = re.compile(
-         r"<input type='hidden' value=\"(.*?)\" name=\"wpEditToken\"")
+         r"<input type='hidden' value=\"(.*?)\" name=\"wpEditToken\""))
 Rwatchlist = re.compile(r"<input tabindex='[\d]+' type='checkbox' "
-                        r"name='wpWatchthis' checked='checked'")
-Rlink = re.compile(r'\[\[(?P<title>[^\]\|\[]*)(\|[^\]]*)?\]\]')
+                        r"name='wpWatchthis' checked='checked'"))
+Rlink = re.compile(r'\[\[(?P<title>[^\]\|\[]*)(\|[^\]]*)?\]\]'))
 
 
 # Page objects (defined here) represent the page itself, including its contents.
@@ -322,16 +322,16 @@ class Page(object):
             t = unicodedata.normalize('NFC', t)
 
             if u'\ufffd' in t:
-                raise InvalidTitle("Title contains illegal char (\\uFFFD)")
+                raise InvalidTitle("Title contains illegal char (\\uFFFD)"))
 
             # Replace underscores by spaces
-            t = t.replace(u"_", u" ")
+            t = t.replace(u"_", u" "))
             # replace multiple spaces a single space
-            while u"  " in t: t = t.replace(u"  ", u" ")
+            while u"  " in t: t = t.replace(u"  ", u" "))
             # Strip spaces at both ends
             t = t.strip()
             # Remove left-to-right and right-to-left markers.
-            t = t.replace(u'\u200e', '').replace(u'\u200f', '')
+            t = t.replace(u'\u200e', '').replace(u'\u200f', ''))
 
             if t.startswith(':'):
                 t = t[1:]
@@ -372,11 +372,11 @@ class Page(object):
                     # Redundant interwiki prefix to the local wiki
                     if lowerNs == self._site.lang:
                         if t == '':
-                            raise Error("Can't have an empty self-link")
+                            raise Error("Can't have an empty self-link"))
                     else:
                         self._site = getSite(lowerNs, self._site.family.name)
                         if t == '':
-                            t = self._site.mediawiki_message('Mainpage')
+                            t = self._site.mediawiki_message('Mainpage'))
 
                 elif lowerNs in self._site.family.get_known_families(site = self._site):
                     if self._site.family.get_known_families(site = self._site)[lowerNs] == self._site.family.name:
@@ -410,7 +410,7 @@ not supported by PyWikipediaBot!"""
             if not t:
                 raise InvalidTitle(u"Invalid title '%s'" % title )
 
-            sectionStart = t.find(u'#')
+            sectionStart = t.find(u'#'))
             # But maybe there are magic words like {{#time|}}
             # TODO: recognize magic word and templates inside links
             # see http://la.wikipedia.org/w/index.php?title=997_Priska&diff=prev&oldid=1038880
@@ -453,7 +453,7 @@ not supported by PyWikipediaBot!"""
             raise
         except:
             if verbose:
-                output(u"Exception in Page constructor")
+                output(u"Exception in Page constructor"))
                 output(
                     u"site=%s, title=%s, insite=%s, defaultNamespace=%i"
                     % (site, title, insite, defaultNamespace)
@@ -535,16 +535,16 @@ not supported by PyWikipediaBot!"""
                 title = u'[[%s]]' % title
         if savetitle or asLink:
             # Ensure there's no wiki syntax in the title
-            title = title.replace(u"''", u'%27%27')
+            title = title.replace(u"''", u'%27%27'))
         if underscore:
-            title = title.replace(' ', '_')
+            title = title.replace(' ', '_'))
         if not withSection:
             sectionName = self.section(underscore=underscore)
             if sectionName:
                 title = title[:-len(sectionName)-1]
         return title
 
-    #@deprecated("Page.title(withNamespace=False)")
+    #@deprecated("Page.title(withNamespace=False)"))
     def titleWithoutNamespace(self, underscore=False):
         """Return title of Page without namespace and without section."""
         return self.title(underscore=underscore, withNamespace=False,
@@ -560,7 +560,7 @@ not supported by PyWikipediaBot!"""
         # systems.
         # Spaces are possible on most systems, but are bad for URLs.
         for forbiddenChar in ':*?/\\ ':
-            result = result.replace(forbiddenChar, '_')
+            result = result.replace(forbiddenChar, '_'))
         return result
 
     @deprecate_arg("decode", None)
@@ -573,7 +573,7 @@ not supported by PyWikipediaBot!"""
         """
         section = self._section
         if section and underscore:
-            section = section.replace(' ', '_')
+            section = section.replace(' ', '_'))
         return section
 
     def sectionFreeTitle(self, underscore=False):
@@ -595,7 +595,7 @@ not supported by PyWikipediaBot!"""
         """Return a console representation of the pagelink."""
         return self.title(asLink=True, forceInterwiki=True
                           ).encode(config.console_encoding,
-                                   "xmlcharrefreplace")
+                                   "xmlcharrefreplace"))
 
     def __unicode__(self):
         return self.title(asLink=True, forceInterwiki=True)
@@ -628,7 +628,7 @@ not supported by PyWikipediaBot!"""
         # representation of an instance can not change after the construction.
         return hash(unicode(self))
 
-    @deprecated("Page.title(asLink=True)")
+    @deprecated("Page.title(asLink=True)"))
     def aslink(self, forceInterwiki=False, textlink=False, noInterwiki=False):
         """Return a string representation in the form of a wikilink.
 
@@ -766,7 +766,7 @@ not supported by PyWikipediaBot!"""
                     raise UserBlocked(self.site(), unicode(self))
                 else:
                     if verbose:
-                        output("The IP address is blocked, retry by login.")
+                        output("The IP address is blocked, retry by login."))
                     self.site().forceLogin(sysop=sysop)
                     return self.get(force, get_redirect, throttle, sysop, change_edit_time)
         if expandtemplates:
@@ -818,7 +818,7 @@ not supported by PyWikipediaBot!"""
         if data['query']['pages'].keys()[0] == "-1":
             if 'missing' in pageInfo:
                 raise NoPage(self.site(), unicode(self),
-"Page does not exist. In rare cases, if you are certain the page does exist, look into overriding family.RversionTab")
+"Page does not exist. In rare cases, if you are certain the page does exist, look into overriding family.RversionTab"))
             elif 'invalid' in pageInfo:
                 raise BadTitle('BadTitle: %s' % self)
         elif 'revisions' in pageInfo: #valid Title
@@ -917,7 +917,7 @@ not supported by PyWikipediaBot!"""
                 # search for messages with no "view source" (aren't used in new versions)
                 if self.site().mediawiki_message('whitelistedittitle') in text:
                     raise NoPage(u'Page editing is forbidden for anonymous '
-                                 u'users.')
+                                 u'users.'))
                 elif self.site().has_mediawiki_message('nocreatetitle') and \
                      self.site().mediawiki_message('nocreatetitle') in text:
                     raise NoPage(self.site(), unicode(self))
@@ -953,7 +953,7 @@ not supported by PyWikipediaBot!"""
                     if retry_idle_time > 30:
                         retry_idle_time = 30
                 else:
-                    output( u"Failed to access wiki")
+                    output( u"Failed to access wiki"))
                     sys.exit(1)
         # Check for restrictions
         m = re.search('var wgRestrictionEdit = \\["(\w+)"\\]', text)
@@ -1100,7 +1100,7 @@ not supported by PyWikipediaBot!"""
 
         if not sectionsonly:
             # assign sections with wiki text and section byteoffset
-            #pywikibot.output(u"  Reading wiki page text (if not already done).")
+            #pywikibot.output(u"  Reading wiki page text (if not already done)."))
 
             debug_data += str(len(self.__dict__.get('_contents',u''))) + '\n'
             self.get()
@@ -1214,11 +1214,11 @@ not supported by PyWikipediaBot!"""
         #print possible_headers
         best_match = (0.0, None)
         for i, (ph, header) in enumerate(possible_headers):
-            #print u'    ', i, difflib.SequenceMatcher(None, header, ph).ratio(), header, ph
+            #print(u'    ', i, difflib.SequenceMatcher(None, header, ph).ratio(), header, ph
             mr = difflib.SequenceMatcher(None, header, ph).ratio()
             if mr >= best_match[0]: best_match = (mr, ph)
             if (i in [0, 1]) and (mr >= cutoff[0]): break  # use first (exact; re) match directly (if good enough)
-        #print u'    ', best_match
+        #print(u'    ', best_match
 
         # prepare resulting data
         section[u'wikiline']    = best_match[1]
@@ -1315,7 +1315,7 @@ not supported by PyWikipediaBot!"""
         """
         if self._editTime and datetime:
             import datetime
-            return datetime.datetime.strptime(str(self._editTime), '%Y%m%d%H%M%S')
+            return datetime.datetime.strptime(str(self._editTime), '%Y%m%d%H%M%S'))
 
         return self._editTime
 
@@ -1426,7 +1426,7 @@ not supported by PyWikipediaBot!"""
         """
         found = False
         if self.isRedirectPage() and self.site().versionnumber() > 13:
-            staticKeys = self.site().getmagicwords('staticredirect')
+            staticKeys = self.site().getmagicwords('staticredirect'))
             text = self.get(get_redirect=True, force=force)
             if staticKeys:
                 for key in staticKeys:
@@ -1553,14 +1553,14 @@ not supported by PyWikipediaBot!"""
                 if distl is None:
                     try:
                         disambigpages = Page(self._site,
-                                             "MediaWiki:Disambiguationspage")
+                                             "MediaWiki:Disambiguationspage"))
                         disambigs = set(link.title(withNamespace=False)
                                         for link in disambigpages.linkedPages()
                                         if link.namespace() == 10)
                         # add index article templates
                         if get_Index and \
                            self._site.sitename() == 'wikipedia:en':
-                            regex = re.compile('\(\((.+?)\)\)')
+                            regex = re.compile('\(\((.+?)\)\)'))
                             content = disambigpages.get()
                             for index in regex.findall(content):
                                 disambigs.add(index[:1].upper() + index[1:])
@@ -1641,7 +1641,7 @@ not supported by PyWikipediaBot!"""
                 if len(template[1]) == 0:
                     return False
                 else:
-                    bots = template[1][0].split(',')
+                    bots = template[1][0].split(','))
                     if 'all' in bots or calledModuleName() in bots \
                        or username in bots:
                         return False
@@ -1650,7 +1650,7 @@ not supported by PyWikipediaBot!"""
                     return True
                 else:
                     (ttype, bots) = template[1][0].split('=', 1)
-                    bots = bots.split(',')
+                    bots = bots.split(','))
                     if ttype == 'allow':
                         return 'all' in bots or username in bots
                     if ttype == 'deny':
@@ -1696,7 +1696,7 @@ not supported by PyWikipediaBot!"""
             'list': [],
         }
         if not onlyTemplateInclusion:
-            params['list'].append('backlinks')
+            params['list'].append('backlinks'))
             params['bltitle'] = self.title()
             params['bllimit'] = config.special_page_limit
             params['blfilterredir'] = 'all'
@@ -1708,7 +1708,7 @@ not supported by PyWikipediaBot!"""
                 params['bllimit'] = 500
 
         if withTemplateInclusion or onlyTemplateInclusion:
-            params['list'].append('embeddedin')
+            params['list'].append('embeddedin'))
             params['eititle'] = self.title()
             params['eilimit'] = config.special_page_limit
             params['eifilterredir'] = 'all'
@@ -1786,7 +1786,7 @@ not supported by PyWikipediaBot!"""
             path+=u'&hideredirs=0&hidetrans=1&hidelinks=1&hideimages=1'
         content = SoupStrainer("div", id=self.site().family.content_id)
         try:
-            next_msg = self.site().mediawiki_message('whatlinkshere-next')
+            next_msg = self.site().mediawiki_message('whatlinkshere-next'))
         except KeyError:
             next_msg = "next %i" % config.special_page_limit
         plural = (config.special_page_limit == 1) and "\\1" or "\\2"
@@ -1794,9 +1794,9 @@ not supported by PyWikipediaBot!"""
         nextpattern = re.compile("^%s$" % next_msg.replace("$1", "[0-9]+"))
         delay = 1
         if self.site().has_mediawiki_message("Isredirect"):
-            self._isredirectmessage = self.site().mediawiki_message("Isredirect")
+            self._isredirectmessage = self.site().mediawiki_message("Isredirect"))
         if self.site().has_mediawiki_message("Istemplate"):
-            self._istemplatemessage = self.site().mediawiki_message("Istemplate")
+            self._istemplatemessage = self.site().mediawiki_message("Istemplate"))
         # to avoid duplicates:
         refPages = set()
         while path:
@@ -1808,10 +1808,10 @@ not supported by PyWikipediaBot!"""
                                  parseOnlyThese=content)
             next_text = body.find(text=nextpattern)
             if next_text is not None and next_text.parent.has_key('href'):
-                path = next_text.parent['href'].replace("&amp;", "&")
+                path = next_text.parent['href'].replace("&amp;", "&"))
             else:
                 path = ""
-            reflist = body.find("ul")
+            reflist = body.find("ul"))
             if reflist is None:
                 return
             for page in self._parse_reflist(reflist,
@@ -1860,7 +1860,7 @@ not supported by PyWikipediaBot!"""
                 continue
 
             if isredirect and follow_redirects:
-                sublist = link.find("ul")
+                sublist = link.find("ul"))
                 if sublist is not None:
                     for p in self._parse_reflist(sublist,
                                 follow_redirects, withTemplateInclusion,
@@ -1916,7 +1916,7 @@ not supported by PyWikipediaBot!"""
         * Returns a restrictions dictionary. Keys are 'edit' and 'move',
           Values are None (no restriction for that action) or [level, expiry] :
             * level is the level of auth needed to perform that action
-                ('autoconfirmed' or 'sysop')
+                ('autoconfirmed' or 'sysop'))
             * expiry is the expiration time of the restriction
         """
         #, titles = None
@@ -1945,7 +1945,7 @@ not supported by PyWikipediaBot!"""
             elif not 'pageid' in text[pageid]:
                 # Don't know what may happen here.
                 # We may want to have better error handling
-                raise Error("BUG> API problem.")
+                raise Error("BUG> API problem."))
             if text[pageid]['protection'] != []:
                 #if titles:
                 #    restrictions = dict([ detail['type'], [ detail['level'], detail['expiry'] ] ]
@@ -2020,7 +2020,7 @@ not supported by PyWikipediaBot!"""
             elif self.site().has_api() and self.namespace() == 2 \
                  and (self.title().endswith('.css') or \
                       self.title().endswith('.js')):
-                titleparts = self.title().split("/")
+                titleparts = self.title().split("/"))
                 userpageowner = titleparts[0].split(":")[1]
                 if userpageowner != username:
                     # API enable: if title ends with .css or .js in ns2
@@ -2045,7 +2045,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
             newtime = self.editTime()
             ### TODO: we have different timestamp formats
             if re.sub('\D', '', str(oldtime)) != re.sub('\D', '', str(newtime)): # page was changed
-                raise EditConflict(u'Page has been changed after first read.')
+                raise EditConflict(u'Page has been changed after first read.'))
             self._editrestriction = False
         # If no comment is given for the change, use the default
         comment = comment or action
@@ -2069,7 +2069,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                 ccToolkit = cosmetic_changes.CosmeticChangesToolkit(self.site(), redirect=self.isRedirectPage(), namespace = self.namespace(), pageTitle=self.title())
                 newtext = ccToolkit.change(newtext)
                 if comment and old.strip().replace('\r\n', '\n') != newtext.strip().replace('\r\n', '\n'):
-                    comment += i18n.twtranslate(self.site(), 'cosmetic_changes-append')
+                    comment += i18n.twtranslate(self.site(), 'cosmetic_changes-append'))
 
         if watchArticle is None:
             # if the page was loaded via get(), we know its status
@@ -2244,7 +2244,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                 #cannot handle longpageerror and PageNoSave yet
                 if errorCode == 'maxlag' or response.code == 503:
                     # server lag; wait for the lag time and retry
-                    lagpattern = re.compile(r"Waiting for [\d.]+: (?P<lag>\d+) seconds? lagged")
+                    lagpattern = re.compile(r"Waiting for [\d.]+: (?P<lag>\d+) seconds? lagged"))
                     lag = lagpattern.search(data['error']['info'])
                     timelag = int(lag.group("lag"))
                     output(u"Pausing %d seconds due to database server lag." % min(timelag,300))
@@ -2253,7 +2253,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                     continue
                 elif errorCode == 'editconflict':
                     # 'editconflict':"Edit conflict detected",
-                    raise EditConflict(u'An edit conflict has occured.')
+                    raise EditConflict(u'An edit conflict has occured.'))
                 elif errorCode == 'spamdetected':
                     # 'spamdetected':"Your edit was refused because it contained a spam fragment: ``\$1''",
                     raise SpamfilterError(data['error']['info'][62:-2])
@@ -2261,7 +2261,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                     # 'pagedeleted':"The page has been deleted since you fetched its timestamp",
                     # Make sure your system clock is correct if this error occurs
                     # without any reason!
-                    # raise EditConflict(u'Someone deleted the page.')
+                    # raise EditConflict(u'Someone deleted the page.'))
                     # No raise, simply define these variables and retry:
                     params['recreate'] = 1
                     if self._editTime:
@@ -2303,16 +2303,16 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                             raise LockedPage()
                         else:
                             self.site().forceLogin(sysop = True)
-                            output(u'Page is locked, retrying using sysop account.')
+                            output(u'Page is locked, retrying using sysop account.'))
                             return self._putPage(text, comment, watchArticle, minorEdit, newPage, token=self.site().getToken(sysop = True), sysop = True)
                     except NoUsername:
                         raise LockedPage()
                 elif errorCode == 'badtoken':
                     if newToken:
-                        output(u"Edit token has failed. Giving up.")
+                        output(u"Edit token has failed. Giving up."))
                     else:
                         # We might have been using an outdated token
-                        output(u"Edit token has failed. Retrying.")
+                        output(u"Edit token has failed. Retrying."))
                         return self._putPage(text, comment, watchArticle, minorEdit, newPage, token=self.site().getToken(sysop = sysop, getagain = True), newToken = True, sysop = sysop)
                 # I think the error message title was changed from "Wikimedia Error"
                 # to "Wikipedia has a problem", but I'm not sure. Maybe we could
@@ -2443,10 +2443,10 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
             # Check blocks
             self.site().checkBlocks(sysop = sysop)
             # A second text area means that an edit conflict has occured.
-            editconflict1 = re.compile('id=["\']wpTextbox2[\'"] name="wpTextbox2"')
-            editconflict2 = re.compile('name="wpTextbox2" id="wpTextbox2"')
+            editconflict1 = re.compile('id=["\']wpTextbox2[\'"] name="wpTextbox2"'))
+            editconflict2 = re.compile('name="wpTextbox2" id="wpTextbox2"'))
             if editconflict1.search(data) or editconflict2.search(data):
-                raise EditConflict(u'An edit conflict has occured.')
+                raise EditConflict(u'An edit conflict has occured.'))
 
             # remove the wpAntispam keyword before checking for Spamfilter
             data = re.sub(u'(?s)<label for="wpAntispam">.*?</label>', '', data)
@@ -2454,7 +2454,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                     and self.site().mediawiki_message('spamprotectiontitle') in data:
                 try:
                     reasonR = re.compile(re.escape(self.site().mediawiki_message('spamprotectionmatch')).replace('\$1', '(?P<url>[^<]*)'))
-                    url = reasonR.search(data).group('url')
+                    url = reasonR.search(data).group('url'))
                 except:
                     # Some wikis have modified the spamprotectionmatch
                     # template in a way that the above regex doesn't work,
@@ -2466,7 +2466,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                     relevant = data[data.find('<!-- start content -->')+22:data.find('<!-- end content -->')].strip()
                     # Throw away all the other links etc.
                     relevant = re.sub('<.*?>', '', relevant)
-                    relevant = relevant.replace('&#58;', ':')
+                    relevant = relevant.replace('&#58;', ':'))
                     # MediaWiki only spam-checks HTTP links, and only the
                     # domain name part of the URL.
                     m = re.search('http://[\w\-\.]+', relevant)
@@ -2479,7 +2479,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
             if '<label for=\'wpRecreate\'' in data:
                 # Make sure your system clock is correct if this error occurs
                 # without any reason!
-                # raise EditConflict(u'Someone deleted the page.')
+                # raise EditConflict(u'Someone deleted the page.'))
                 # No raise, simply define these variables and retry:
                 if self._editTime:
                     predata['wpEdittime'] = self._editTime
@@ -2503,14 +2503,14 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                         raise LockedPage()
                     else:
                         self.site().forceLogin(sysop = True)
-                        output(u'Page is locked, retrying using sysop account.')
+                        output(u'Page is locked, retrying using sysop account.'))
                         return self._putPageOld(text, comment, watchArticle, minorEdit, newPage, token=self.site().getToken(sysop = True), sysop = True)
                 except NoUsername:
                     raise LockedPage()
             if not newToken and "<textarea" in data:
                 ##if "<textarea" in data: # for debug use only, if badtoken still happen
                 # We might have been using an outdated token
-                output(u"Changing page has failed. Retrying.")
+                output(u"Changing page has failed. Retrying."))
                 return self._putPageOld(text, comment, watchArticle, minorEdit, newPage, token=self.site().getToken(sysop = sysop, getagain = True), newToken = True, sysop = sysop)
             # I think the error message title was changed from "Wikimedia Error"
             # to "Wikipedia has a problem", but I'm not sure. Maybe we could
@@ -2548,7 +2548,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                     re.sub(r'\\{\\{plural\\:.*?\\}\\}', '.*?',
                         re.escape(
                             html2unicode(
-                                self.site().mediawiki_message('longpageerror')
+                                self.site().mediawiki_message('longpageerror'))
                             )
                         )
                     ).replace("\$1", "(?P<length>[\d,.\s]+)", 1).replace("\$2", "(?P<limit>[\d,.\s]+)", 1),
@@ -2560,9 +2560,9 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                     # [[MediaWiki:longpageerror]]
                     longpage_length = 0 ; longpage_limit = 0
                     if 'length' in match.groups():
-                        longpage_length = match.group('length')
+                        longpage_length = match.group('length'))
                     if 'limit' in match.groups():
-                        longpage_limit = match.group('limit')
+                        longpage_limit = match.group('limit'))
                     raise LongPageError(longpage_length, longpage_limit)
 
             # We might have been prompted for a captcha if the
@@ -2576,7 +2576,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
             if  response.code != 302 and data.strip() != u"":
                 # Something went wrong, and we don't know what. Show the
                 # HTML code that hopefully includes some error message.
-                error(u"Unexpected response from wiki server.")
+                error(u"Unexpected response from wiki server."))
                 output(u"       %s (%s) " % (response.code, response.msg))
                 output(data)
                 # Unexpected responses should raise an error and not pass,
@@ -2611,9 +2611,9 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
             }
 
         if section == 'new':
-            params['text'] = self._encodeArg(newtext, 'text')
+            params['text'] = self._encodeArg(newtext, 'text'))
         else:
-            params['appendtext'] = self._encodeArg(newtext, 'text')
+            params['appendtext'] = self._encodeArg(newtext, 'text'))
         if minorEdit:
             params['minor'] = 1
         else:
@@ -2768,12 +2768,12 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
         thistxt = self.site().resolvemagicwords(thistxt)
 
         for match in Rlink.finditer(thistxt):
-            title = match.group('title')
-            title = title.replace("_", " ").strip(" ")
+            title = match.group('title'))
+            title = title.replace("_", " ").strip(" "))
             if self.namespace() in self.site.family.namespacesWithSubpage:
                 # convert relative link to absolute link
                 if title.startswith(".."):
-                    parts = self.title().split('/')
+                    parts = self.title().split('/'))
                     parts.pop()
                     title = u'/'.join(parts) + title[2:]
                 elif title.startswith("/"):
@@ -2859,7 +2859,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
             pass
 ##            output(u"""\
 ##thistxt argument of templatesWithParams is deprecated. Please use textlib method
-##extract_templates_and_params() instead.""")
+##extract_templates_and_params() instead."""))
         return [(t[0].upper() + t[1:], p) for t, p in
                 extract_templates_and_params(thistxt, asList=True)]
 
@@ -2876,7 +2876,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
             raise
         except IsRedirectPage as err:
             # otherwise it will return error pages with " inside.
-            target = err[0].replace('&amp;quot;', '"')
+            target = err[0].replace('&amp;quot;', '"'))
 
             if '|' in target:
                 warnings.warn("'%s' has a | character, this makes no sense"
@@ -2995,7 +2995,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
             if result['query']['pages'].keys()[0] == "-1":
                 if 'missing' in pageInfo:
                     raise NoPage(self.site(), unicode(self),
-                                 "Page does not exist.")
+                                 "Page does not exist."))
                 elif 'invalid' in pageInfo:
                     raise BadTitle('BadTitle: %s' % self)
 
@@ -3024,7 +3024,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                         values['ids'] = r['revid']
                     if '*' in r:
                         values['content'] = r['*']
-                    elements = params['rvprop'].split('|')
+                    elements = params['rvprop'].split('|'))
                     row = [values[e] for e in elements]
                     dataQ.append(tuple(row))
                 if len(result['query']['pages'].values()[0]['revisions']) < revCount:
@@ -3040,15 +3040,15 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
         thisHistoryDone = False
         startFromPage = None
         if self.site().versionnumber() < 4:
-            editR = re.compile('<li>\(.*?\)\s+\(.*\).*?<a href=".*?oldid=([0-9]*)" title=".*?">([^<]*)</a> <span class=\'user\'><a href=".*?" title=".*?">([^<]*?)</a></span>.*?(?:<span class=\'comment\'>(.*?)</span>)?</li>')
+            editR = re.compile('<li>\(.*?\)\s+\(.*\).*?<a href=".*?oldid=([0-9]*)" title=".*?">([^<]*)</a> <span class=\'user\'><a href=".*?" title=".*?">([^<]*?)</a></span>.*?(?:<span class=\'comment\'>(.*?)</span>)?</li>'))
         elif self.site().versionnumber() < 15:
-            editR = re.compile('<li>\(.*?\)\s+\(.*\).*?<a href=".*?oldid=([0-9]*)" title=".*?">([^<]*)</a> (?:<span class=\'history-user\'>|)<a href=".*?" title=".*?">([^<]*?)</a>.*?(?:</span>|).*?(?:<span class=[\'"]comment[\'"]>(.*?)</span>)?</li>')
+            editR = re.compile('<li>\(.*?\)\s+\(.*\).*?<a href=".*?oldid=([0-9]*)" title=".*?">([^<]*)</a> (?:<span class=\'history-user\'>|)<a href=".*?" title=".*?">([^<]*?)</a>.*?(?:</span>|).*?(?:<span class=[\'"]comment[\'"]>(.*?)</span>)?</li>'))
         elif self.site().versionnumber() < 16:
             editR = re.compile(r'<li class=".*?">\((?:\w*|<a[^<]*</a>)\)\s\((?:\w*|<a[^<]*</a>)\).*?<a href=".*?([0-9]*)" title=".*?">([^<]*)</a> <span class=\'history-user\'><a [^>]*?>([^<]*?)</a>.*?</span></span>(?: <span class="minor">.*?</span>|)(?: <span class="history-size">.*?</span>|)(?: <span class=[\'"]comment[\'"]>\((?:<span class="autocomment">|)(.*?)(?:</span>|)\)</span>)?(?: \(<span class="mw-history-undo">.*?</span>\)|)\s*</li>', re.UNICODE)
         else:
             editR = re.compile(r'<li(?: class="mw-tag[^>]+)?>\((?:\w+|<a[^<]*</a>)\)\s\((?:\w+|<a[^<]*</a>)\).*?<a href=".*?([0-9]*)" title=".*?">([^<]*)</a> <span class=\'history-user\'><a [^>]*?>([^<]*?)</a>.*?</span></span>(?: <abbr class="minor"[^>]*?>.*?</abbr>|)(?: <span class="history-size">.*?</span>|)(?: <span class="comment">\((?:<span class="autocomment">|)(.*?)(?:</span>|)\)</span>)?(?: \(<span class="mw-history-undo">.*?</span>\))?(?: <span class="mw-tag-markers">.*?</span>\)</span>)?\s*</li>', re.UNICODE)
 
-        RLinkToNextPage = re.compile('&amp;offset=(.*?)&amp;')
+        RLinkToNextPage = re.compile('&amp;offset=(.*?)&amp;'))
 
         while not thisHistoryDone:
             path = self.site().family.version_history_address(self.site().language(), self.urlname(), config.special_page_limit)
@@ -3146,7 +3146,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
         # Load history informations by API query.
         return self._getVersionHistory(getAll=getAll, skipFirst=skipFirst,
                                        reverseOrder=reverseOrder, revCount=revCount,
-                                       rvprop='ids|timestamp|user|content')
+                                       rvprop='ids|timestamp|user|content'))
 
     def contributingUsers(self, step=None, total=None):
         """Return a set of usernames (or IPs) of users who edited this page.
@@ -3255,7 +3255,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
         if reason is None:
             pywikibot.output(u'Moving %s to [[%s]].'
                              % (self.title(asLink=True), newtitle))
-            reason = input(u'Please enter a reason for the move:')
+            reason = input(u'Please enter a reason for the move:'))
         if self.isTalkPage():
             movetalkpage = False
 
@@ -3305,7 +3305,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                     self.get(force=True, get_redirect=True, throttle=False)
                 except NoPage:
                     output(u'Page %s is moved and no longer exist.' % self.title() )
-                    #delattr(self, '_contents')
+                    #delattr(self, '_contents'))
             return True
 
     def _moveOld(self, newtitle, reason=None, movetalkpage=True, movesubpages=False, sysop=False,
@@ -3326,7 +3326,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
         if throttle:
             put_throttle()
         if reason is None:
-            reason = input(u'Please enter a reason for the move:')
+            reason = input(u'Please enter a reason for the move:'))
         if self.isTalkPage():
             movetalkpage = False
 
@@ -3339,7 +3339,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
             'wpReason': reason.encode(self.site().encoding()),
         }
         if deleteAndMove:
-            predata['wpDeleteAndMove'] = self.site().mediawiki_message('delete_and_move_confirm')
+            predata['wpDeleteAndMove'] = self.site().mediawiki_message('delete_and_move_confirm'))
             predata['wpConfirm'] = '1'
 
         if movetalkpage:
@@ -3381,7 +3381,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                     self.get(force=True, get_redirect=True, throttle=False)
                 except NoPage:
                     output(u'Page %s is moved and no longer exist.' % self.title() )
-                    #delattr(self, '_contents')
+                    #delattr(self, '_contents'))
 
             return True
         else:
@@ -3405,10 +3405,10 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                 # XXX : This might be buggy : if the move was successful, the target pase *has* been created
                 raise PageNotSaved(u'Page move failed: Target page [[%s]] already exists.' % newtitle)
             else:
-                output(u'Page move failed for unknown reason.')
+                output(u'Page move failed for unknown reason.'))
                 try:
                     ibegin = data.index('<!-- start content -->') + 22
-                    iend = data.index('<!-- end content -->')
+                    iend = data.index('<!-- end content -->'))
                 except ValueError:
                     # if begin/end markers weren't found, show entire HTML file
                     output(data)
@@ -3449,11 +3449,11 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
             put_throttle()
         if reason is None:
             output(u'Deleting %s.' % (self.title(asLink=True)))
-            reason = input(u'Please enter a reason for the deletion:')
+            reason = input(u'Please enter a reason for the deletion:'))
         answer = u'y'
         if prompt and not hasattr(self.site(), '_noDeletePrompt'):
             answer = inputChoice(u'Do you want to delete %s?' % self,
-                                 ['yes', 'no', 'all'], ['y', 'N', 'a'], 'N')
+                                 ['yes', 'no', 'all'], ['y', 'N', 'a'], 'N'))
             if answer == 'a':
                 answer = 'y'
                 self.site()._noDeletePrompt = True
@@ -3512,7 +3512,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                                % self)
                         try:
                             ibegin = data.index('<!-- start content -->') + 22
-                            iend = data.index('<!-- end content -->')
+                            iend = data.index('<!-- end content -->'))
                         except ValueError:
                             # if begin/end markers weren't found, show entire HTML file
                             output(data)
@@ -3609,7 +3609,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
             # Login
             self._getActionUser(action = 'delete', sysop = True)
 
-            output(u'Retrieving text of deleted revision...')
+            output(u'Retrieving text of deleted revision...'))
             address = self.site().undelete_view_address(self.urlname(),timestamp)
             text = self.site().getUrl(address, sysop = True)
             und = re.search('<textarea readonly="1" cols="80" rows="25">(.*?)</textarea><div><form method="post"',text,re.DOTALL)
@@ -3639,7 +3639,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
         will be restored.
 
         Simplest case:
-            Page(...).undelete('This will restore all revisions')
+            Page(...).undelete('This will restore all revisions'))
 
         More complex:
             pg = Page(...)
@@ -3647,7 +3647,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
             for rev in revs:
                 if ... #decide whether to undelete a revision
                     pg.markDeletedRevision(rev) #mark for undeletion
-            pg.undelete('This will restore only selected revisions.')
+            pg.undelete('This will restore only selected revisions.'))
 
         @param comment: The undeletion edit summary.
 
@@ -3662,7 +3662,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
         if comment is None:
             output(u'Preparing to undelete %s.'
                    % (self.title(asLink=True)))
-            comment = input(u'Please enter a reason for the undeletion:')
+            comment = input(u'Please enter a reason for the undeletion:'))
 
         if throttle:
             put_throttle()
@@ -3697,7 +3697,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                 'target': self.title(),
                 'wpComment': comment,
                 'wpEditToken': token,
-                'restore': self.site().mediawiki_message('undeletebtn')
+                'restore': self.site().mediawiki_message('undeletebtn'))
             }
 
             if self._deletedRevs and self._deletedRevsModified:
@@ -3721,7 +3721,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
         If reason is None,  asks for a reason. If prompt is True, asks the
         user if he wants to protect the page. Valid values for ec and move
         are:
-           * '' (equivalent to 'none')
+           * '' (equivalent to 'none'))
            * 'autoconfirmed'
            * 'sysop'
 
@@ -3734,7 +3734,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
 
         #if self.exists() and editcreate != move: # check protect level if edit/move not same
         #    if editcreate == 'sysop' and move != 'sysop':
-        #        raise Error("The level configuration is not safe")
+        #        raise Error("The level configuration is not safe"))
 
         if unprotect:
             editcreate = move = ''
@@ -3744,13 +3744,13 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
             put_throttle()
         if reason is None:
             reason = input(
-              u'Please enter a reason for the change of the protection level:')
+              u'Please enter a reason for the change of the protection level:'))
         reason = reason.encode(self.site().encoding())
         answer = 'y'
         if prompt and not hasattr(self.site(), '_noProtectPrompt'):
             answer = inputChoice(
                 u'Do you want to change the protection level of %s?' % self,
-                ['Yes', 'No', 'All'], ['Y', 'N', 'A'], 'N')
+                ['Yes', 'No', 'All'], ['Y', 'N', 'A'], 'N'))
             if answer == 'a':
                 answer = 'y'
                 self.site()._noProtectPrompt = True
@@ -3800,7 +3800,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                 if editcreate != 'sysop' or move != 'sysop' or not self.exists():
                     # You can't protect a page as autoconfirmed and cascading, prevent the error
                     # Cascade only available exists page, create prot. not.
-                    output(u"NOTE: The page can't be protected with cascading and not also with only-sysop. Set cascading \"off\"")
+                    output(u"NOTE: The page can't be protected with cascading and not also with only-sysop. Set cascading \"off\""))
                 else:
                     params['cascade'] = 1
 
@@ -3842,7 +3842,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
                 # You can't protect a page as autoconfirmed and cascading, prevent the error
                 # Cascade only available exists page, create prot. not.
                 cascading = '0'
-                output(u"NOTE: The page can't be protected with cascading and not also with only-sysop. Set cascading \"off\"")
+                output(u"NOTE: The page can't be protected with cascading and not also with only-sysop. Set cascading \"off\""))
             else:
                 cascading = '1'
 
@@ -3930,13 +3930,13 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
             if self.site().nocapitalize:
                 return re.escape(s)
             else:
-                return ur'(?:[%s%s]%s)' % (re.escape(s[0].upper()), re.escape(s[0].lower()), re.escape(s[1:]))
+                return r'(?:[%s%s]%s)' % (re.escape(s[0].upper()), re.escape(s[0].lower()), re.escape(s[1:]))
 
         namespaces = set(site.namespace(6, all = True) + site.namespace(-2, all = True))
         # note that the colon is already included here
-        namespacePattern = ur'\s*(?:%s)\s*\:\s*' % u'|'.join(namespaces)
+        namespacePattern = r'\s*(?:%s)\s*\:\s*' % u'|'.join(namespaces)
 
-        imagePattern = u'(%s)' % capitalizationPattern(image).replace(r'\_', '[ _]')
+        imagePattern = u'(%s)' % capitalizationPattern(image).replace(r'\_', '[ _]'))
 
         def filename_replacer(match):
             if replacement is None:
@@ -3949,18 +3949,18 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
         # as the image caption. The caption can contain wiki links, but each
         # link has to be closed properly.
         paramPattern = r'(?:\|(?:(?!\[\[).|\[\[.*?\]\])*?)'
-        rImage = re.compile(ur'\[\[(?P<namespace>%s)(?P<filename>%s)(?P<params>%s*?)\]\]' % (namespacePattern, imagePattern, paramPattern))
+        rImage = re.compile(r'\[\[(?P<namespace>%s)(?P<filename>%s)(?P<params>%s*?)\]\]' % (namespacePattern, imagePattern, paramPattern))
         if replacement is None:
             new_text = rImage.sub('', new_text)
         else:
             new_text = rImage.sub('[[\g<namespace>%s\g<params>]]' % replacement, new_text)
 
         # Remove the image from galleries
-        galleryR = re.compile(r'(?is)<gallery>(?P<items>.*?)</gallery>')
+        galleryR = re.compile(r'(?is)<gallery>(?P<items>.*?)</gallery>'))
         galleryItemR = re.compile(r'(?m)^%s?(?P<filename>%s)\s*(?P<label>\|.*?)?\s*$' % (namespacePattern, imagePattern))
 
         def gallery_replacer(match):
-            return ur'<gallery>%s</gallery>' % galleryItemR.sub(filename_replacer, match.group('items'))
+            return r'<gallery>%s</gallery>' % galleryItemR.sub(filename_replacer, match.group('items'))
 
         new_text = galleryR.sub(gallery_replacer, new_text)
 
@@ -3968,7 +3968,7 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
             # All previous steps did not work, so the image is
             # likely embedded in a complicated template.
             # Note: this regular expression can't handle nested templates.
-            templateR = re.compile(ur'(?s)\{\{(?P<contents>.*?)\}\}')
+            templateR = re.compile(r'(?s)\{\{(?P<contents>.*?)\}\}'))
             fileReferenceR = re.compile(u'%s(?P<filename>(?:%s)?)' % (namespacePattern, imagePattern))
 
             def template_replacer(match):
@@ -4047,7 +4047,7 @@ class DataPage(Page):
         self._originTitle = title
         source = self._originSite.data_repository()
         Page.__init__(self, source, title, *args, **kwargs)
-        self._siteTitle=self._originSite.dbName().split('_')[0].replace("-","_")
+        self._siteTitle=self._originSite.dbName().split('_')[0].replace("-","_"))
         if not (self._originSite == source):
             self._title = None
     def getID(self):
@@ -4206,7 +4206,7 @@ class DataPage(Page):
                              'site': self._siteTitle})
         else:
             value=json.dumps(value)
-            value=value.replace("'", '"')
+            value=value.replace("'", '"'))
             params['data'] = value
         if token:
             params['token'] = token
@@ -4385,7 +4385,7 @@ class DataPage(Page):
                 for ref in refs:
                     if isinstance(ref, basestring):
                         raise RuntimeError(
-                            "the references must be like this: {(ref1, value1), (ref2, value2)}")
+                            "the references must be like this: {(ref1, value1), (ref2, value2)}"))
                     for i in range(2):
                         if isinstance(ref[i], int):
                             value = ref[i]
@@ -4418,7 +4418,7 @@ class DataPage(Page):
                         snak.append(value)
             else:
                 raise RuntimeError(
-                    "the references format cannot be understood!")
+                    "the references format cannot be understood!"))
             if snak:
                 finalsnak = {}
                 for i in range(0, len(snak) / 2):
@@ -4432,7 +4432,7 @@ class DataPage(Page):
             else:
                 finalsnak=refs
             finalsnak=json.dumps(finalsnak)
-            finalsnak=finalsnak.replace("'", '"')
+            finalsnak=finalsnak.replace("'", '"'))
             params = {
             'action': 'wbsetreference',
             'statement': guid,
@@ -4560,7 +4560,7 @@ class DataPage(Page):
             if 'missing' in pageInfo:
                 raise NoPage(self.site(), unicode(self),
 "Page does not exist. In rare cases, if you are certain the page does exist, "
-                             "look into overriding family.RversionTab")
+                             "look into overriding family.RversionTab"))
             elif 'invalid' in pageInfo:
                 raise BadTitle('BadTitle: %s' % self)
         elif 'revisions' in pageInfo: #valid Title
@@ -4654,7 +4654,7 @@ class DataPage(Page):
         if 'missing' in pageInfo:
             raise NoPage(self.site(), unicode(self),
 "Page does not exist. In rare cases, if you are certain the page does exist, "
-                         "look into overriding family.RversionTab")
+                         "look into overriding family.RversionTab"))
         elif 'invalid' in pageInfo:
             raise BadTitle('BadTitle: %s' % self)
         return entities
@@ -4687,7 +4687,7 @@ class DataPage(Page):
         pageInfo = search
         if 'missing' in pageInfo:
             raise NoPage(self.site(), unicode(self),
-"Page does not exist. In rare cases, if you are certain the page does exist, look into overriding family.RversionTab")
+"Page does not exist. In rare cases, if you are certain the page does exist, look into overriding family.RversionTab"))
         elif 'invalid' in pageInfo:
             raise BadTitle('BadTitle: %s' % self)
 
@@ -4721,11 +4721,11 @@ class DataPage(Page):
 
     def linktitles(self):
         raise NotImplementedError(
-            u'Wikidata member function "wblinktitles" was not implemented yet')
+            u'Wikidata member function "wblinktitles" was not implemented yet'))
 
     def removereferences(self):
         raise NotImplementedError(
-            u'Wikidata member function "wbremovereferences" was not implemented yet')
+            u'Wikidata member function "wbremovereferences" was not implemented yet'))
 
 wikidataPage = DataPage  #keep compatible
 
@@ -4785,7 +4785,7 @@ class ImagePage(Page):
         try:
             data = query.GetData(params, self.site())
         except NotImplementedError:
-            output("API not work, loading page HTML.")
+            output("API not work, loading page HTML."))
             self.getImagePageHtml()
             return
 
@@ -4797,7 +4797,7 @@ class ImagePage(Page):
         if data['query']['pages'].keys()[0] == "-1":
             if 'missing' in pageInfo and self._local:
                 raise NoPage(self.site(), unicode(self),
-                             "Page does not exist.")
+                             "Page does not exist."))
             elif 'invalid' in pageInfo:
                 raise BadTitle('BadTitle: %s' % self)
         infos = []
@@ -4819,7 +4819,7 @@ class ImagePage(Page):
                 else:
                     break
         except KeyError:
-            output("No image in imagepage")
+            output("No image in imagepage"))
         self._infoLoaded = True
         if limit > 1:
             return infos
@@ -4845,7 +4845,7 @@ class ImagePage(Page):
         urlR = re.compile(r'<div class="fullImageLink" id="file">.*?<a href="(?P<url>[^ ]+?)"(?! class="image")|<span class="dangerousLink"><a href="(?P<url2>.+?)"', re.DOTALL)
         m = urlR.search(self.getImagePageHtml())
 
-        url = m.group('url') or m.group('url2')
+        url = m.group('url') or m.group('url2'))
         return url
 
     def fileIsOnCommons(self):
@@ -4856,12 +4856,12 @@ class ImagePage(Page):
         if self._infoLoaded:
             return not self._local
 
-        return self.fileUrl().startswith(u'http://upload.wikimedia.org/wikipedia/commons/')
+        return self.fileUrl().startswith(u'http://upload.wikimedia.org/wikipedia/commons/'))
 
     def fileIsShared(self):
         """Return True if image is stored on Wikitravel shared repository."""
         if 'wikitravel_shared' in self.site().shared_image_repository():
-            return self.fileUrl().startswith(u'http://wikitravel.org/upload/shared/')
+            return self.fileUrl().startswith(u'http://wikitravel.org/upload/shared/'))
         return self.fileIsOnCommons()
 
     # FIXME: MD5 might be performed on incomplete file due to server
@@ -4890,22 +4890,22 @@ class ImagePage(Page):
         #from ImagePage HTML
         history = re.search('(?s)<table class="wikitable filehistory">.+?</table>', self.getImagePageHtml())
         if history:
-            lineR = re.compile(r'<tr>(?:<td>.*?</td>){1,2}<td.*?><a href=".+?">(?P<datetime>.+?)</a></td><td>.*?(?P<resolution>\d+\xd7\d+) <span.*?>\((?P<filesize>.+?)\)</span></td><td><a href=".+?"(?: class="new"|) title=".+?">(?P<username>.+?)</a>.*?</td><td>(?:.*?<span class="comment">\((?P<comment>.*?)\)</span>)?</td></tr>')
+            lineR = re.compile(r'<tr>(?:<td>.*?</td>){1,2}<td.*?><a href=".+?">(?P<datetime>.+?)</a></td><td>.*?(?P<resolution>\d+\xd7\d+) <span.*?>\((?P<filesize>.+?)\)</span></td><td><a href=".+?"(?: class="new"|) title=".+?">(?P<username>.+?)</a>.*?</td><td>(?:.*?<span class="comment">\((?P<comment>.*?)\)</span>)?</td></tr>'))
             if not lineR.search(history.group()):
                 # b/c code
-                lineR = re.compile(r'<tr>(?:<td>.*?</td>){1,2}<td><a href=".+?">(?P<datetime>.+?)</a></td><td><a href=".+?"(?: class="new"|) title=".+?">(?P<username>.+?)</a>.*?</td><td>(?P<resolution>.*?)</td><td class=".+?">(?P<filesize>.+?)</td><td>(?P<comment>.*?)</td></tr>')
+                lineR = re.compile(r'<tr>(?:<td>.*?</td>){1,2}<td><a href=".+?">(?P<datetime>.+?)</a></td><td><a href=".+?"(?: class="new"|) title=".+?">(?P<username>.+?)</a>.*?</td><td>(?P<resolution>.*?)</td><td class=".+?">(?P<filesize>.+?)</td><td>(?P<comment>.*?)</td></tr>'))
         else:
             # backward compatible code
             history = re.search('(?s)<ul class="special">.+?</ul>', self.getImagePageHtml())
             if history:
-                lineR = re.compile('<li> \(.+?\) \(.+?\) <a href=".+?" title=".+?">(?P<datetime>.+?)</a> . . <a href=".+?" title=".+?">(?P<username>.+?)</a> \(.+?\) . . (?P<resolution>\d+.+?\d+) \((?P<filesize>[\d,\.]+) .+?\)( <span class="comment">(?P<comment>.*?)</span>)?</li>')
+                lineR = re.compile('<li> \(.+?\) \(.+?\) <a href=".+?" title=".+?">(?P<datetime>.+?)</a> . . <a href=".+?" title=".+?">(?P<username>.+?)</a> \(.+?\) . . (?P<resolution>\d+.+?\d+) \((?P<filesize>[\d,\.]+) .+?\)( <span class="comment">(?P<comment>.*?)</span>)?</li>'))
 
         if history:
             for match in lineR.finditer(history.group()):
-                datetime = match.group('datetime')
-                username = match.group('username')
-                resolution = match.group('resolution')
-                size = match.group('filesize')
+                datetime = match.group('datetime'))
+                username = match.group('username'))
+                resolution = match.group('resolution'))
+                size = match.group('filesize'))
                 comment = match.group('comment') or ''
                 result.append((datetime, username, resolution, size, comment))
         return result
@@ -4944,9 +4944,9 @@ class ImagePage(Page):
                     output("Skipping %s because it's a redirect." % self.title())
                     return None
                 else:
-                    raise NoHash('No Hash found in the APIs! Maybe the regex to catch it is wrong or someone has changed the APIs structure.')
+                    raise NoHash('No Hash found in the APIs! Maybe the regex to catch it is wrong or someone has changed the APIs structure.'))
         else:
-            output(u'File deleted before getting the Hash. Skipping...')
+            output(u'File deleted before getting the Hash. Skipping...'))
             return None
 
     def getFileVersionHistoryTable(self):
@@ -4988,7 +4988,7 @@ class ImagePage(Page):
         titleList = re.search('(?s)<h2 id="filelinks">.+?<!-- end content -->',
                               self.getImagePageHtml()).group()
         lineR = re.compile(
-                    '<li><a href="[^\"]+" title=".+?">(?P<title>.+?)</a></li>')
+                    '<li><a href="[^\"]+" title=".+?">(?P<title>.+?)</a></li>'))
 
         for match in lineR.finditer(titleList):
             try:
@@ -5024,7 +5024,7 @@ class ImagePage(Page):
             for (page, globalusage) in data['query']['pages'].items():
                 for gu in globalusage['globalusage']:
                     #FIXME : Should have a cleaner way to get the wiki where the image is used
-                    siteparts = gu['wiki'].split('.')
+                    siteparts = gu['wiki'].split('.'))
                     if len(siteparts)==3:
                         if siteparts[0] in self.site().fam().alphabetic and \
                            siteparts[1] in ['wikipedia', 'wiktionary',
@@ -5129,12 +5129,12 @@ class _GetAll(object):
                 handler = xmlreader.MediaWikiXmlHandler()
                 handler.setCallback(self.oneDone)
                 handler.setHeaderCallback(self.headerDone)
-                #f = open("backup.txt", "w")
+                #f = open("backup.txt", "w"))
                 #f.write(data)
                 #f.close()
                 try:
                     xml.sax.parseString(data, handler)
-                except (xml.sax._exceptions.SAXParseException, ValueError), err:
+                except (xml.sax._exceptions.SAXParseException, ValueError) as err:
                     debugDump( 'SaxParseBug', self.site, err, data )
                     raise
                 except PageNotFound:
@@ -5213,7 +5213,7 @@ class _GetAll(object):
     def headerDone(self, header):
         # Verify version
         version = header.generator
-        p = re.compile('^MediaWiki (.+)$')
+        p = re.compile('^MediaWiki (.+)$'))
         m = p.match(version)
         if m:
             version = m.group(1)
@@ -5270,7 +5270,7 @@ class _GetAll(object):
             pagenames = [encodeEsperantoX(pagetitle) for pagetitle in pagenames]
         pagenames = u'\r\n'.join(pagenames)
         if type(pagenames) is not unicode:
-            warning(u'xmlreader.WikipediaXMLHandler.getData() got non-unicode page names. Please report this.')
+            warning(u'xmlreader.WikipediaXMLHandler.getData() got non-unicode page names. Please report this.'))
             output(unicode(pagenames))
         # convert Unicode string to the encoding used on that wiki
         pagenames = pagenames.encode(self.site.encoding())
@@ -5380,7 +5380,7 @@ class _GetAll(object):
             raise PageNotFound
 
     def headerDoneApi(self, header):
-        p = re.compile('^MediaWiki (.+)$')
+        p = re.compile('^MediaWiki (.+)$'))
         m = p.match(header['general']['generator'])
         if m:
             version = m.group(1)
@@ -5494,7 +5494,7 @@ def setAction(s):
     action = s
 
 # Default action
-setAction('Wikipedia python library')
+setAction('Wikipedia python library'))
 
 def setUserAgent(s):
     """Set a User-agent: header passed to the HTTP server"""
@@ -5517,7 +5517,7 @@ def url2link(percentname, insite, site):
     """
     # Note: this is only needed if linking between wikis that use different
     # encodings, so it is now largely obsolete.  [CONFIRM]
-    percentname = percentname.replace('_', ' ')
+    percentname = percentname.replace('_', ' '))
     x = url2unicode(percentname, site = site)
     return unicode2html(x, insite.encoding())
 
@@ -5547,7 +5547,7 @@ def decodeEsperantoX(text):
     for latin, esperanto in chars.iteritems():
         # A regular expression that matches a letter combination which IS
         # encoded using x-convention.
-        xConvR = re.compile(latin + '[xX]+')
+        xConvR = re.compile(latin + '[xX]+'))
         pos = 0
         result = ''
         # Each matching substring will be regarded exactly once.
@@ -5583,7 +5583,7 @@ def encodeEsperantoX(text):
     """
     # A regular expression that matches a letter combination which is NOT
     # encoded in x-convention.
-    notXConvR = re.compile('[cghjsuCGHJSU][xX]+')
+    notXConvR = re.compile('[cghjsuCGHJSU][xX]+'))
     pos = 0
     result = ''
     while True:
@@ -5622,7 +5622,7 @@ def url2unicode(title, site, site2 = None):
     """
     # create a list of all possible encodings for both hint sites
     encList = [site.encoding()] + list(site.encodings())
-    if site2 and site2 <> site:
+    if site2 and site2 != site:
         encList.append(site2.encoding())
         encList += list(site2.encodings())
     firstException = None
@@ -5661,7 +5661,7 @@ def html2unicode(text, ignore = []):
     # This regular expression will match any decimal and hexadecimal entity and
     # also entities that might be named entities.
     entityR = re.compile(
-        r'&(?:amp;)?(#(?P<decimal>\d+)|#x(?P<hex>[0-9a-fA-F]+)|(?P<name>[A-Za-z]+));')
+        r'&(?:amp;)?(#(?P<decimal>\d+)|#x(?P<hex>[0-9a-fA-F]+)|(?P<name>[A-Za-z]+));'))
         
     ignore.extend((38,     # Ampersand (&amp;)
                    39,     # Bugzilla 24093
@@ -5719,7 +5719,7 @@ def html2unicode(text, ignore = []):
             elif match.group('hex'):
                 unicodeCodepoint = int(match.group('hex'), 16)
             elif match.group('name'):
-                name = match.group('name')
+                name = match.group('name'))
                 if name in htmlentitydefs.name2codepoint:
                     # We found a known HTML entity.
                     unicodeCodepoint = htmlentitydefs.name2codepoint[name]
@@ -6016,7 +6016,7 @@ class Site(object):
         """
 ##        # DEPRECATED warning. Should be uncommented if scripts are actualized
 ##        output('Page.site() method is DEPRECATED, '
-##               'use Page.site instead.')
+##               'use Page.site instead.'))
         return self
 
     @property
@@ -6127,7 +6127,7 @@ class Site(object):
         if default or self.versionnumber() <= 13:
             return u'REDIRECT'
         else:
-            return self.getmagicwords('redirect')[0].lstrip("#")
+            return self.getmagicwords('redirect')[0].lstrip("#"))
 
     def loggedInAs(self, sysop = False):
         """Return the current username if logged in, otherwise return None.
@@ -6298,8 +6298,8 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
     def _readCookies(self, filename):
         """read login cookie file and return a dictionary."""
         try:
-            f = open( config.datafilepath('login-data', filename), 'r')
-            ck = re.compile("(.*?)=(.*?)\r?\n")
+            f = open( config.datafilepath('login-data', filename), 'r'))
+            ck = re.compile("(.*?)=(.*?)\r?\n"))
             data = dict([(x[0],x[1]) for x in ck.findall(f.read())])
             #data = dict(ck.findall(f.read()))
             f.close()
@@ -6334,12 +6334,12 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
         # write the data.
         if self.family.cross_projects and cache[0]:
             filename = '%s-%s-central-login.data' % (self.family.name, self.username(sysop))
-            f = open(config.datafilepath('login-data', filename), 'w')
+            f = open(config.datafilepath('login-data', filename), 'w'))
             f.write(cache[0])
             f.close()
 
         filename = '%s-%s-%s-login.data' % (self.family.name, self.lang, self.username(sysop))
-        f = open(config.datafilepath('login-data', filename), 'w')
+        f = open(config.datafilepath('login-data', filename), 'w'))
         f.write(cache[1])
         f.close()
 
@@ -6382,9 +6382,9 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
         wpEditToken = None
         for key, value in iterator:
             if isinstance(key, unicode):
-                key = key.encode('utf-8')
+                key = key.encode('utf-8'))
             if isinstance(value, unicode):
-                value = value.encode('utf-8')
+                value = value.encode('utf-8'))
             key = urllib.quote(key)
             value = urllib.quote(value)
             if key == 'wpEditToken':
@@ -6413,15 +6413,15 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
                     url = self.protocol() + '://' + self.hostname() + self.captcha_image_address(id)
                     answer = ui.askForCaptcha(url)
                 else: #no captcha id result, maybe ReCaptcha.
-                    raise CaptchaError('We have been prompted for a ReCaptcha, but pywikipedia does not yet support ReCaptchas')
+                    raise CaptchaError('We have been prompted for a ReCaptcha, but pywikipedia does not yet support ReCaptchas'))
                 return {'id':id, 'answer':answer}
             return None
         else:
-            captchaW = re.compile('<label for="wpCaptchaWord">(?P<question>[^<]*)</label>')
-            captchaR = re.compile('<input type="hidden" name="wpCaptchaId" id="wpCaptchaId" value="(?P<id>\d+)" />')
+            captchaW = re.compile('<label for="wpCaptchaWord">(?P<question>[^<]*)</label>'))
+            captchaR = re.compile('<input type="hidden" name="wpCaptchaId" id="wpCaptchaId" value="(?P<id>\d+)" />'))
             match = captchaR.search(data)
             if match:
-                id = match.group('id')
+                id = match.group('id'))
                 match = captchaW.search(data)
                 if match:
                     answer = input('What is the answer to the captcha "%s" ?' % match.group('question'))
@@ -6431,9 +6431,9 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
                     url = self.protocol() + '://' + self.hostname() + self.captcha_image_address(id)
                     answer = ui.askForCaptcha(url)
                 return {'id':id, 'answer':answer}
-            Recaptcha = re.compile('<script type="text/javascript" src="http://api\.recaptcha\.net/[^"]*"></script>')
+            Recaptcha = re.compile('<script type="text/javascript" src="http://api\.recaptcha\.net/[^"]*"></script>'))
             if Recaptcha.search(data):
-                raise CaptchaError('We have been prompted for a ReCaptcha, but pywikipedia does not yet support ReCaptchas')
+                raise CaptchaError('We have been prompted for a ReCaptcha, but pywikipedia does not yet support ReCaptchas'))
             return None
 
     def postForm(self, address, predata, sysop = False, cookies = None):
@@ -6557,9 +6557,9 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
         if hasattr(f, 'sheaders'):
             ck = f.sheaders
         else:
-            ck = f.info().getallmatchingheaders('set-cookie')
+            ck = f.info().getallmatchingheaders('set-cookie'))
         if ck:
-            Reat=re.compile(': (.*?)=(.*?);')
+            Reat=re.compile(': (.*?)=(.*?);'))
             tmpc = {}
             for d in ck:
                 m = Reat.search(d)
@@ -6567,8 +6567,8 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             if self.cookies(sysop):
                 self.updateCookies(tmpc, sysop)
 
-        resContentType = headers.get('content-type', '')
-        contentEncoding = headers.get('content-encoding', '')
+        resContentType = headers.get('content-type', ''))
+        contentEncoding = headers.get('content-encoding', ''))
 
         # Ensure that all sent data is received
         # In rare cases we found a douple Content-Length in the header.
@@ -6583,27 +6583,27 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
         if compress and contentEncoding == 'gzip':
             text = decompress_gzip(text)
 
-        R = re.compile('charset=([^\'\";]+)')
+        R = re.compile('charset=([^\'\";]+)'))
         m = R.search(resContentType)
         if m:
             charset = m.group(1)
         else:
             if verbose:
-                warning(u"No character set found.")
+                warning(u"No character set found."))
             # UTF-8 as default
             charset = 'utf-8'
         # Check if this is the charset we expected
         self.checkCharset(charset)
         # Convert HTML to Unicode
         try:
-            text = unicode(text, charset, errors = 'strict')
+            text = unicode(text, charset, errors = 'strict'))
         except UnicodeDecodeError:
             if verbose:
                 exception()
             error(u'Invalid characters found on %s://%s%s, replaced by \\ufffd.'
                   % (self.protocol(), self.hostname(), address))
             # We use error='replace' in case of bad encoding.
-            text = unicode(text, charset, errors = 'replace')
+            text = unicode(text, charset, errors = 'replace'))
 
         # If a wiki page, get user data
         self._getUserDataOld(text, sysop = sysop)
@@ -6715,12 +6715,12 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             self._rights[index] = []
             if self._isLoggedIn[index]:
                 # Logged in user
-                self._rights[index].append('user')
+                self._rights[index].append('user'))
                 # Assume bot, and thus autoconfirmed
                 self._rights[index].extend(['bot', 'autoconfirmed'])
                 if sysop:
                     # Assume user reported as a sysop indeed has the sysop rights
-                    self._rights[index].append('sysop')
+                    self._rights[index].append('sysop'))
         # Assume the user has the default rights if API not query back
         self._rights[index].extend(['read', 'createaccount', 'edit', 'upload', 'createpage', 'createtalk', 'move', 'upload'])
         #remove Duplicate rights
@@ -6796,11 +6796,11 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
         # Note that the link of anonymous users (which doesn't exist at all
         # in Wikimedia sites) has the ID pt-anonuserpage, and thus won't be
         # found here.
-        userpageR = re.compile('<li id="pt-userpage".*?><a href=".+?".*?>(?P<username>.+?)</a></li>')
+        userpageR = re.compile('<li id="pt-userpage".*?><a href=".+?".*?>(?P<username>.+?)</a></li>'))
         m = userpageR.search(text)
         if m:
             self._isLoggedIn[index] = True
-            self._userName[index] = m.group('username')
+            self._userName[index] = m.group('username'))
         else:
             self._isLoggedIn[index] = False
             # No idea what is the user name, and it isn't important
@@ -6810,29 +6810,29 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             self = self.family.user_page_link(self,index)
 
         # Check user groups, if possible (introduced in 1.10)
-        groupsR = re.compile(r'var wgUserGroups = \[\"(.+)\"\];')
+        groupsR = re.compile(r'var wgUserGroups = \[\"(.+)\"\];'))
         m = groupsR.search(text)
         checkLocal = True
         if default_code in self.family.cross_allowed: # if current languages in cross allowed list, check global bot flag.
-            globalgroupsR = re.compile(r'var wgGlobalGroups = \[\"(.+)\"\];')
+            globalgroupsR = re.compile(r'var wgGlobalGroups = \[\"(.+)\"\];'))
             mg = globalgroupsR.search(text)
             if mg: # the account had global permission
                 globalRights = mg.group(1)
-                globalRights = globalRights.split('","')
+                globalRights = globalRights.split('","'))
                 self._rights[index] = globalRights
                 if self._isLoggedIn[index]:
                     if 'Global_bot' in globalRights: # This account has the global bot flag, no need to check local flags.
                         checkLocal = False
                     else:
-                        output(u'Your bot account does not have global the bot flag, checking local flag.')
+                        output(u'Your bot account does not have global the bot flag, checking local flag.'))
         else:
             if verbose:
-                output(u'Note: this language does not allow global bots.')
+                output(u'Note: this language does not allow global bots.'))
         if m and checkLocal:
             rights = m.group(1)
-            rights = rights.split('", "')
+            rights = rights.split('", "'))
             if '*' in rights:
-                rights.remove('*')
+                rights.remove('*'))
             self._rights[index] = rights
             # Warnings
             # Don't show warnings for not logged in users, they will just fail to
@@ -6851,21 +6851,21 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             self._rights[index] = []
             if self._isLoggedIn[index]:
                 # Logged in user
-                self._rights[index].append('user')
+                self._rights[index].append('user'))
                 # Assume bot, and thus autoconfirmed
                 self._rights[index].extend(['bot', 'autoconfirmed'])
                 if sysop:
                     # Assume user reported as a sysop indeed has the sysop rights
-                    self._rights[index].append('sysop')
+                    self._rights[index].append('sysop'))
         # Assume the user has the default rights
         self._rights[index].extend(['read', 'createaccount', 'edit', 'upload', 'createpage', 'createtalk', 'move', 'upload'])
         if 'bot' in self._rights[index] or 'sysop' in self._rights[index]:
-            self._rights[index].append('apihighlimits')
+            self._rights[index].append('apihighlimits'))
         if 'sysop' in self._rights[index]:
             self._rights[index].extend(['delete', 'undelete', 'block', 'protect', 'import', 'deletedhistory', 'unwatchedpages'])
 
         # Search for a token
-        tokenR = re.compile(r"\<input type='hidden' value=\"(.*?)\" name=\"wpEditToken\"")
+        tokenR = re.compile(r"\<input type='hidden' value=\"(.*?)\" name=\"wpEditToken\""))
         tokenloc = tokenR.search(text)
         if tokenloc:
             self._token[index] = tokenloc.group(1)
@@ -6923,7 +6923,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
                 params['siprop'] = [key]
         try:
             data = query.GetData(params, self)['query']
-        except KeyError, NotImplementedError:
+        except (KeyError, NotImplementedError):
             return None
 
         if not hasattr(self, '_info'):
@@ -6950,7 +6950,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
         if (not self._mediawiki_messages) or forceReload:
             api = self.has_api()
             if verbose:
-                output(u"Retrieving mediawiki messages from Special:Allmessages")
+                output(u"Retrieving mediawiki messages from Special:Allmessages"))
             # Only MediaWiki r27393/1.12 and higher support XML output for Special:Allmessages
             if self.versionnumber() < 12:
                 usePHP = True
@@ -6967,7 +6967,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
                             from elementtree.ElementTree import XML
                 except ImportError:
                     if verbose:
-                        output(u'Elementtree was not found, using BeautifulSoup instead')
+                        output(u'Elementtree was not found, using BeautifulSoup instead'))
                     elementtree = False
 
             if config.use_diskcache and not api:
@@ -6993,15 +6993,15 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
                     #self._mediawiki_messages = _dict([(tag['name'].lower(), tag['*'])
                     #        for tag in datas if not 'missing' in tag])
                 elif usePHP:
-                    phppage = self.getUrl(self.get_address("Special:Allmessages") + "&ot=php")
-                    Rphpvals = re.compile(r"(?ms)'([^']*)' =&gt; '(.*?[^\\])',")
+                    phppage = self.getUrl(self.get_address("Special:Allmessages") + "&ot=php"))
+                    Rphpvals = re.compile(r"(?ms)'([^']*)' =&gt; '(.*?[^\\])',"))
                     # Previous regexp don't match empty messages. Fast workaround...
                     phppage = re.sub("(?m)^('.*?' =&gt;) '',", r"\1 ' ',", phppage)
                     self._mediawiki_messages = _dict([(name.strip().lower(),
                         html2unicode(message.replace("\\'", "'")))
                             for (name, message) in Rphpvals.findall(phppage)])
                 else:
-                    xml = self.getUrl(self.get_address("Special:Allmessages") + "&ot=xml")
+                    xml = self.getUrl(self.get_address("Special:Allmessages") + "&ot=xml"))
                     # xml structure is :
                     # <messages lang="fr">
                     #    <message name="about">À propos</message>
@@ -7012,7 +7012,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
 
                         # Skip extraneous data such as PHP warning or extra
                         # whitespaces added from some MediaWiki extensions
-                        xml_dcl_pos = decode.find('<?xml')
+                        xml_dcl_pos = decode.find('<?xml'))
                         if xml_dcl_pos > 0:
                             decode = decode[xml_dcl_pos:]
 
@@ -7098,9 +7098,9 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
                 'uiprop': ['blockinfo', 'groups', 'rights', 'hasmsg'],
             }
             if self.versionnumber() >= 12:
-                params['uiprop'].append('ratelimits')
+                params['uiprop'].append('ratelimits'))
             if self.versionnumber() >= 14:
-                params['uiprop'].append('preferencestoken')
+                params['uiprop'].append('preferencestoken'))
 
             data = query.GetData(params, self, sysop=sysop)
 
@@ -7115,7 +7115,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
 
             self._getUserData(text, sysop = sysop, force = force)
         else:
-            url = self.edit_address('Non-existing_page')
+            url = self.edit_address('Non-existing_page'))
             text = self.getUrl(url, sysop = sysop)
 
             self._getUserDataOld(text, sysop = sysop, force = force)
@@ -7165,7 +7165,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
                                        n=number, ns=namespaces)
             get_throttle()
             html = self.getUrl(path)
-            entryR = re.compile(ur'<li><a href=".+?" title="(?P<title>.+?)">.+?</a>',
+            entryR = re.compile(r'<li><a href=".+?" title="(?P<title>.+?)">.+?</a>',
                                 re.DOTALL)
             for m in entryR.finditer(html):
                 page = Page(self, m.group('title'))
@@ -7183,7 +7183,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
                         'review', 'stable', 'gblblock', 'renameuser',
                         'globalauth', 'gblrights', 'abusefilter',
                         'articlefeedbackv5', 'newusers'):
-            raise NotImplementedError, mode
+            raise NotImplementedError(mode)
         params = {
             'action'    : 'query',
             'list'      : 'logevents',
@@ -7253,7 +7253,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             elif repeat:
                 nbresults = 0
                 try:
-                    params.pop('lestart')
+                    params.pop('lestart'))
                 except KeyError:
                     pass
             else:
@@ -7308,14 +7308,14 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
 
                 entryR = re.compile('<li[^>]*>(?P<date>.+?) \S*?<a href=".+?"'
                     ' title="(?P<title>.+?)">.+?</a>.+?[\(\[](?P<length>[\d,.]+)[^\)\]]*[\)\]]'
-                    ' .?<a href=".+?" title=".+?:(?P<username>.+?)">')
+                    ' .?<a href=".+?" title=".+?:(?P<username>.+?)">'))
                 for m in entryR.finditer(html):
-                    date = m.group('date')
-                    title = m.group('title')
-                    title = title.replace('&quot;', '"')
+                    date = m.group('date'))
+                    title = m.group('title'))
+                    title = title.replace('&quot;', '"'))
                     length = int(re.sub("[,.]", "", m.group('length')))
                     loggedIn = u''
-                    username = m.group('username')
+                    username = m.group('username'))
                     comment = u''
 
                     if title not in seen:
@@ -7336,13 +7336,13 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
         # this comment applies to all the XXXXpages methods following, as well
         seen = set()
         path = self.longpages_address(n=number)
-        entryR = re.compile(ur'<li>\(<a href=".+?" title=".+?">.+?</a>\) .<a href=".+?" title="(?P<title>.+?)">.+?</a> .\[(?P<length>[\d.,]+).*?\]</li>', re.UNICODE)
+        entryR = re.compile(r'<li>\(<a href=".+?" title=".+?">.+?</a>\) .<a href=".+?" title="(?P<title>.+?)">.+?</a> .\[(?P<length>[\d.,]+).*?\]</li>', re.UNICODE)
 
         while True:
             get_throttle()
             html = self.getUrl(path)
             for m in entryR.finditer(html):
-                title = m.group('title')
+                title = m.group('title'))
                 length = int(re.sub('[.,]', '', m.group('length')))
                 if title not in seen:
                     seen.add(title)
@@ -7356,14 +7356,14 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
         throttle = True
         seen = set()
         path = self.shortpages_address(n = number)
-        entryR = re.compile(ur'<li>\(<a href=".+?" title=".+?">.+?</a>\) .<a href=".+?" title="(?P<title>.+?)">.+?</a> .\[(?P<length>[\d.,]+).*?\]</li>', re.UNICODE)
+        entryR = re.compile(r'<li>\(<a href=".+?" title=".+?">.+?</a>\) .<a href=".+?" title="(?P<title>.+?)">.+?</a> .\[(?P<length>[\d.,]+).*?\]</li>', re.UNICODE)
 
         while True:
             get_throttle()
             html = self.getUrl(path)
 
             for m in entryR.finditer(html):
-                title = m.group('title')
+                title = m.group('title'))
                 length = int(re.sub('[., ]', '', m.group('length')))
 
                 if title not in seen:
@@ -7382,9 +7382,9 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             get_throttle()
             html = self.getUrl(path)
             entryR = re.compile(
-                '<li><a href=".+?" title="(?P<title>.+?)">.+?</a>.*?</li>')
+                '<li><a href=".+?" title="(?P<title>.+?)">.+?</a>.*?</li>'))
             for m in entryR.finditer(html):
-                title = m.group('title')
+                title = m.group('title'))
                 if title not in seen:
                     seen.add(title)
                     page = catlib.Category(self, title)
@@ -7400,9 +7400,9 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             get_throttle()
             html = self.getUrl(path)
             entryR = re.compile(
-                '<li><a href=".+?" title="(?P<title>.+?)">.+?</a></li>')
+                '<li><a href=".+?" title="(?P<title>.+?)">.+?</a></li>'))
             for m in entryR.finditer(html):
-                title = m.group('title')
+                title = m.group('title'))
 
                 if title not in seen:
                     seen.add(title)
@@ -7418,10 +7418,10 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             path = self.ancientpages_address(n=number)
             get_throttle()
             html = self.getUrl(path)
-            entryR = re.compile('<li><a href=".+?" title="(?P<title>.+?)">.+?</a> (?P<date>.+?)</li>')
+            entryR = re.compile('<li><a href=".+?" title="(?P<title>.+?)">.+?</a> (?P<date>.+?)</li>'))
             for m in entryR.finditer(html):
-                title = m.group('title')
-                date = m.group('date')
+                title = m.group('title'))
+                date = m.group('date'))
                 if title not in seen:
                     seen.add(title)
                     page = Page(self, title)
@@ -7438,9 +7438,9 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             get_throttle()
             html = self.getUrl(path)
             entryR = re.compile(
-                '<li><a href=".+?" title="(?P<title>.+?)">.+?</a></li>')
+                '<li><a href=".+?" title="(?P<title>.+?)">.+?</a></li>'))
             for m in entryR.finditer(html):
-                title = m.group('title')
+                title = m.group('title'))
 
                 if title not in seen:
                     seen.add(title)
@@ -7457,9 +7457,9 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             get_throttle()
             html = self.getUrl(path, sysop = True)
             entryR = re.compile(
-                '<li><a href=".+?" title="(?P<title>.+?)">.+?</a>.+?</li>')
+                '<li><a href=".+?" title="(?P<title>.+?)">.+?</a>.+?</li>'))
             for m in entryR.finditer(html):
-                title = m.group('title')
+                title = m.group('title'))
                 if title not in seen:
                     seen.add(title)
                     page = Page(self, title)
@@ -7476,9 +7476,9 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             get_throttle()
             html = self.getUrl(path)
             entryR = re.compile(
-                '<li><a href=".+?" title="(?P<title>.+?)">.+?</a></li>')
+                '<li><a href=".+?" title="(?P<title>.+?)">.+?</a></li>'))
             for m in entryR.finditer(html):
-                title = m.group('title')
+                title = m.group('title'))
                 if title not in seen:
                     seen.add(title)
                     page = catlib.Category(self, title)
@@ -7585,7 +7585,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             try:
                 rcData = data['query']['recentchanges']
             except KeyError:
-                raise ServerError("The APIs don't return data, the site may be down")
+                raise ServerError("The APIs don't return data, the site may be down"))
 
             for i in rcData:
                 if i['pageid'] not in seen:
@@ -7605,7 +7605,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
 
     def patrol(self, rcid, token = None):
         if not self.has_api() or self.versionnumber() < 12:
-            raise Exception('patrol: no API: not implemented')
+            raise Exception('patrol: no API: not implemented'))
 
         if not token:
             token = self.getPatrolToken()
@@ -7633,7 +7633,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             get_throttle()
             html = self.getUrl(path)
             for m in entryR.finditer(html):
-                title = m.group('title')
+                title = m.group('title'))
                 if title not in seen:
                     seen.add(title)
                     page = ImagePage(self, title)
@@ -7649,9 +7649,9 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             get_throttle()
             html = self.getUrl(path)
             entryR = re.compile(
-                '<li><a href=".+?" title="(?P<title>.+?)">.+?</a></li>')
+                '<li><a href=".+?" title="(?P<title>.+?)">.+?</a></li>'))
             for m in entryR.finditer(html):
-                title = m.group('title')
+                title = m.group('title'))
 
                 if title not in seen:
                     seen.add(title)
@@ -7668,9 +7668,9 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             get_throttle()
             html = self.getUrl(path)
             entryR = re.compile(
-                '<li><a href=".+?" title="(?P<title>.+?)">.+?</a></li>')
+                '<li><a href=".+?" title="(?P<title>.+?)">.+?</a></li>'))
             for m in entryR.finditer(html):
-                title = m.group('title')
+                title = m.group('title'))
 
                 if title not in seen:
                     seen.add(title)
@@ -7687,9 +7687,9 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             path = self.unusedcategories_address(n=number)
             get_throttle()
             html = self.getUrl(path)
-            entryR = re.compile('<li><a href=".+?" title="(?P<title>.+?)">.+?</a></li>')
+            entryR = re.compile('<li><a href=".+?" title="(?P<title>.+?)">.+?</a></li>'))
             for m in entryR.finditer(html):
-                title = m.group('title')
+                title = m.group('title'))
 
                 if title not in seen:
                     seen.add(title)
@@ -7707,9 +7707,9 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             get_throttle()
             html = self.getUrl(path)
             entryR = re.compile(
-                '<li><a href=".+?" class="new" title="(?P<title>.+?) \(page does not exist\)">.+?</a> .+?\)</li>')
+                '<li><a href=".+?" class="new" title="(?P<title>.+?) \(page does not exist\)">.+?</a> .+?\)</li>'))
             for m in entryR.finditer(html):
-                title = m.group('title')
+                title = m.group('title'))
 
                 if title not in seen:
                     seen.add(title)
@@ -7730,7 +7730,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             html = self.getUrl(path)
             for m in entryR.finditer(html):
                 fileext = None
-                title = m.group('title')
+                title = m.group('title'))
                 if extension:
                     fileext = title[len(title)-3:]
                 if title not in seen and fileext == extension:
@@ -7754,9 +7754,9 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             path = self.withoutinterwiki_address(n=number)
             get_throttle()
             html = self.getUrl(path)
-            entryR = re.compile('<li><a href=".+?" title="(?P<title>.+?)">.+?</a></li>')
+            entryR = re.compile('<li><a href=".+?" title="(?P<title>.+?)">.+?</a></li>'))
             for m in entryR.finditer(html):
-                title = m.group('title')
+                title = m.group('title'))
                 if title not in seen:
                     seen.add(title)
                     page = Page(self, title)
@@ -7907,7 +7907,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
                 iend = returned_html.index(end_s,ibegin + 3)
             except ValueError:
                 if monobook_error:
-                    raise ServerError("Couldn't extract allpages special page. Make sure you're using MonoBook skin.")
+                    raise ServerError("Couldn't extract allpages special page. Make sure you're using MonoBook skin."))
                 else:
                     # No list of wikilinks
                     break
@@ -7915,16 +7915,16 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             # remove the irrelevant sections
             returned_html = returned_html[ibegin:iend]
             if self.versionnumber()==2:
-                R = re.compile('/wiki/(.*?)\" *class=[\'\"]printable')
+                R = re.compile('/wiki/(.*?)\" *class=[\'\"]printable'))
             elif self.versionnumber()<5:
                 # Apparently the special code for redirects was added in 1.5
-                R = re.compile('title ?=\"(.*?)\"')
+                R = re.compile('title ?=\"(.*?)\"'))
             elif not includeredirects:
-                R = re.compile('\<td(?: width="33%")?\>\<a href=\"\S*\" +title ?="(.*?)"')
+                R = re.compile('\<td(?: width="33%")?\>\<a href=\"\S*\" +title ?="(.*?)"'))
             elif includeredirects == 'only':
-                R = re.compile('\<td(?: width="33%")?>\<[^\<\>]*allpagesredirect\"\>\<a href=\"\S*\" +title ?="(.*?)"')
+                R = re.compile('\<td(?: width="33%")?>\<[^\<\>]*allpagesredirect\"\>\<a href=\"\S*\" +title ?="(.*?)"'))
             else:
-                R = re.compile('title ?=\"(.*?)\"')
+                R = re.compile('title ?=\"(.*?)\"'))
             # Count the number of useful links on this page
             n = 0
             for hit in R.findall(returned_html):
@@ -7944,7 +7944,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             if n < 100:
                 if (not includeredirects) or includeredirects == 'only':
                     # Maybe there were only so few because the rest is or is not a redirect
-                    R = re.compile('title ?=\"(.*?)\"')
+                    R = re.compile('title ?=\"(.*?)\"'))
                     allLinks = R.findall(returned_html)
                     if len(allLinks) < 100:
                         break
@@ -8019,13 +8019,13 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
     def linksearch(self, siteurl, limit=500):
         """Yield Pages from results of Special:Linksearch for 'siteurl'."""
         cache = []
-        R = re.compile('title ?=\"([^<>]*?)\">[^<>]*</a></li>')
+        R = re.compile('title ?=\"([^<>]*?)\">[^<>]*</a></li>'))
         urlsToRetrieve = [siteurl]
         if not siteurl.startswith('*.'):
             urlsToRetrieve.append('*.' + siteurl)
 
         if self.has_api() and self.versionnumber() >= 11:
-            output(u'Querying API exturlusage...')
+            output(u'Querying API exturlusage...'))
             for url in urlsToRetrieve:
                 params = {
                     'action': 'query',
@@ -8053,7 +8053,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
                     else:
                             break
         else:
-            output(u'Querying [[Special:Linksearch]]...')
+            output(u'Querying [[Special:Linksearch]]...'))
             for url in urlsToRetrieve:
                 offset = 0
                 while True:
@@ -8062,11 +8062,11 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
                     html = self.getUrl(path)
                     #restricting the HTML source :
                     #when in the source, this div marks the beginning of the input
-                    loc = html.find('<div class="mw-spcontent">')
+                    loc = html.find('<div class="mw-spcontent">'))
                     if loc > -1:
                         html = html[loc:]
                     #when in the source, marks the end of the linklist
-                    loc = html.find('<div class="printfooter">')
+                    loc = html.find('<div class="printfooter">'))
                     if loc > -1:
                         html = html[:loc]
 
@@ -8105,12 +8105,12 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
         of the link refers to this site's own family and/or language.
 
         """
-        s = s.replace("_", " ").strip(" ").lstrip(":")
+        s = s.replace("_", " ").strip(" ").lstrip(":"))
         if not ':' in s:
             return False
         first, rest = s.split(':',1)
         # interwiki codes are case-insensitive
-        first = first.lower().strip(" ")
+        first = first.lower().strip(" "))
         # commons: forwards interlanguage links to wikipedia:, etc.
         if self.family.interwiki_forward:
             interlangTargetFamily = Family(self.family.interwiki_forward)
@@ -8144,7 +8144,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
         """
         #NOTE: this is needed, since the API can give false positives!
         default = 'REDIRECT'
-        keywords = self.versionnumber() > 13 and self.getmagicwords('redirect')
+        keywords = self.versionnumber() > 13 and self.getmagicwords('redirect'))
         if keywords:
             pattern = r'(?:' + '|'.join(keywords) + ')'
         else:
@@ -8300,7 +8300,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
 
     def get_address(self, s):
         """Return URL path to retrieve page titled 's'."""
-        title = s.replace(' ', '_')
+        title = s.replace(' ', '_'))
         return self.family.get_address(self.lang, title)
 
     def nice_get_address(self, s):
@@ -8498,7 +8498,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
         if not hasattr(self, "_mw_version"):
             PATTERN = r"^(?:: )?([0-9]+)\.([0-9]+)(.*)$"
             versionpage = self.getUrl(self.get_address("Special:Version"))
-            htmldata = BeautifulSoup(versionpage, convertEntities="html")
+            htmldata = BeautifulSoup(versionpage, convertEntities="html"))
             # try to find the live version
             versionlist = []
             # 1st try is for mw < 1.17wmf1
@@ -8521,7 +8521,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
                 if m:
                     break
             else:
-                raise Error(u'Cannot find any live version!')
+                raise Error(u'Cannot find any live version!'))
             self._mw_version = (int(m.group(1)), int(m.group(2)), m.group(3))
         return self._mw_version
 
@@ -8662,7 +8662,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
     def getToken(self, getalways = True, getagain = False, sysop = False):
         index = self._userIndex(sysop)
         if getagain or (getalways and self._token[index] is None):
-            output(u'Getting a token.')
+            output(u'Getting a token.'))
             self._load(sysop = sysop, force = True)
         if self._token[index] is not None:
             return self._token[index]
@@ -8673,7 +8673,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
         index = self._userIndex(sysop)
 
         if self._patrolToken[index] is None:
-            output(u'Getting a patrol token.')
+            output(u'Getting a patrol token.'))
             params = {
                 'action'    : 'query',
                 'list'      : 'recentchanges',
@@ -8690,7 +8690,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
             try:
                 rcData = data['query']['recentchanges']
             except KeyError:
-                raise ServerError("The APIs don't return data, the site may be down")
+                raise ServerError("The APIs don't return data, the site may be down"))
 
             self._patrolToken[index] = rcData[0]['patroltoken']
 
@@ -8738,7 +8738,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
         """
 
         if not self.has_api():
-            raise Exception('parse: no API: not implemented')
+            raise Exception('parse: no API: not implemented'))
 
         # call the wiki to get info
         params = {
@@ -8747,7 +8747,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
         }
 
         pywikibot.get_throttle()
-        pywikibot.output(u"Parsing string through the wiki parser via API.")
+        pywikibot.output(u"Parsing string through the wiki parser via API."))
 
         result = query.GetData(params, self)
         r = result[u'parse'][u'text'][u'*']
@@ -8771,7 +8771,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
         """
 
         if not self.has_api():
-            raise Exception('expandtemplates: no API: not implemented')
+            raise Exception('expandtemplates: no API: not implemented'))
 
         # call the wiki to get info
         params = {
@@ -8780,7 +8780,7 @@ sysopnames['%s']['%s']='name' to your user-config.py"""
         }
 
         pywikibot.get_throttle()
-        pywikibot.output(u"Expanding string through the wiki parser via API.")
+        pywikibot.output(u"Expanding string through the wiki parser via API."))
 
         result = query.GetData(params, self)
         r = result[u'expandtemplates'][u'*']
@@ -8841,11 +8841,11 @@ def _decodeArg(arg):
         if config.console_encoding in ('cp437', 'cp850'):
             # Western Windows versions give parameters encoded as windows-1252
             # even though the console encoding is cp850 or cp437.
-            return unicode(arg, 'windows-1252')
+            return unicode(arg, 'windows-1252'))
         elif config.console_encoding == 'cp852':
             # Central/Eastern European Windows versions give parameters encoded
             # as windows-1250 even though the console encoding is cp852.
-            return unicode(arg, 'windows-1250')
+            return unicode(arg, 'windows-1250'))
         else:
             return unicode(arg, config.console_encoding)
     else:
@@ -8917,7 +8917,7 @@ def handleArgs(*args):
         elif arg == '-simulate':
             simulate = True
         elif arg == '-dry':
-            output(u"Usage of -dry is deprecated; use -simulate instead.")
+            output(u"Usage of -dry is deprecated; use -simulate instead."))
             simulate = True
         # global debug option for development purposes. Normally does nothing.
         elif arg == '-debug':
@@ -8945,7 +8945,7 @@ More information: See https://sourceforge.net/support/tracker.php?aid=3081100
 \03{lightyellow}Please update python to 2.7.2+ if you are running on wikimedia sites!\03{default}
 ================================================================================
 
-""")
+"""))
     if verbose:
       output(u'Pywikipediabot %s' % (version.getversion()))
       output(u'Python %s' % sys.version)
@@ -9019,7 +9019,7 @@ Global arguments available for all bots:
     output(globalHelp, toStdout=True)
     try:
         exec('import %s as module' % moduleName)
-        helpText = module.__doc__.decode('utf-8')
+        helpText = module.__doc__.decode('utf-8'))
         if hasattr(module, 'docuReplacements'):
             for key, value in module.docuReplacements.iteritems():
                 helpText = helpText.replace(key, value.strip('\n\r'))
@@ -9033,7 +9033,7 @@ Global arguments available for all bots:
 
 # search for user interface module in the 'userinterfaces' subdirectory
 sys.path.append(config.datafilepath('userinterfaces'))
-exec "import %s_interface as uiModule" % config.userinterface
+exec("import %s_interface as uiModule" % config.userinterface)
 ui = uiModule.UI()
 verbose = 0
 simulate = False
@@ -9044,7 +9044,7 @@ unicode_error = __import__('unicodedata').normalize(
     u'\u092e\u093e\u0930\u094d\u0915 \u091c\u093c\u0941\u0915\u0947\u0930\u092c\u0930\u094d\u0917'
     ) != u'\u092e\u093e\u0930\u094d\u0915 \u091c\u093c\u0941\u0915\u0947\u0930\u092c\u0930\u094d\u0917'
 if unicode_error:
-    print u'unicode test: triggers problem #3081100'
+    print(u'unicode test: triggers problem #3081100'
 
 default_family = config.family
 default_code = config.mylang
@@ -9067,11 +9067,11 @@ def writeToCommandLogFile():
     modname = os.path.basename(sys.argv[0])
     # put quotation marks around all parameters
     args = [_decodeArg(modname)] + [_decodeArg('"%s"' % s) for s in sys.argv[1:]]
-    commandLogFilename = config.datafilepath('logs', 'commands.log')
+    commandLogFilename = config.datafilepath('logs', 'commands.log'))
     try:
-        commandLogFile = codecs.open(commandLogFilename, 'a', 'utf-8')
+        commandLogFile = codecs.open(commandLogFilename, 'a', 'utf-8'))
     except IOError:
-        commandLogFile = codecs.open(commandLogFilename, 'w', 'utf-8')
+        commandLogFile = codecs.open(commandLogFilename, 'w', 'utf-8'))
     # add a timestamp in ISO 8601 formulation
     isoDate = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
     commandLogFile.write("%s r%s Python %s "
@@ -9093,7 +9093,7 @@ def setLogfileStatus(enabled, logname=None, header=False):
     # NOTE-1: disable 'fh.setFormatter(formatter)' below in order to get "old"
     #         logging format (without additional info)
     # NOTE-2: enable 'logger.addHandler(ch)' below in order output to console
-    #         also (e.g. for simplifying 'pywikibot.output')
+    #         also (e.g. for simplifying 'pywikibot.output'))
     global logger #_handlers_initialized
 
     if not logger:
@@ -9115,11 +9115,11 @@ def setLogfileStatus(enabled, logname=None, header=False):
             fh = logging.handlers.RotatingFileHandler(filename=logfn,
                                            maxBytes=1024 * config.logfilesize,
                                            backupCount=config.logfilecount,
-                                           encoding='utf-8')
+                                           encoding='utf-8'))
         else:
             ver = int( '%02i%02i' % tuple(sys.version_info)[:2] )
             kwargs = {     'when': 'midnight',
-                       #'encoding': 'bz2-codec')
+                       #'encoding': 'bz2-codec'))
                        'encoding': 'utf-8' }
             if ver > int('0205'):
                 # For Python > 2.5 (added in version 2.6)
@@ -9148,7 +9148,7 @@ def setLogfileStatus(enabled, logname=None, header=False):
         logger.addHandler(fh)           # output to logfile
         #logger.addHandler(ch)           # output to terminal/shell console
 
-        logger = logging.getLogger('pywiki')
+        logger = logging.getLogger('pywiki'))
 
         if header:
             writelogheader()
@@ -9190,17 +9190,17 @@ def init_handlers(strm=None):#, logname=None, header=False):
     global logger #_handlers_initialized
 
     if not logger:
-        logging.addLevelName(VERBOSE, "VERBOSE")
+        logging.addLevelName(VERBOSE, "VERBOSE"))
             # for messages to be displayed on terminal at "verbose" setting
             # use INFO for messages to be displayed even on non-verbose setting
-        logging.addLevelName(STDOUT, "STDOUT")
+        logging.addLevelName(STDOUT, "STDOUT"))
             # for messages to be displayed to stdout
-        logging.addLevelName(INPUT, "INPUT")
+        logging.addLevelName(INPUT, "INPUT"))
             # for prompts requiring user response
 
         logger = logging.getLogger()    # root logger
         if logger.handlers:             # init just once (if re-called)
-            logger = logging.getLogger('pywiki')
+            logger = logging.getLogger('pywiki'))
             return
         logger.setLevel(DEBUG+1) # all records except DEBUG go to logger
         if hasattr(logger, 'captureWarnings'):
@@ -9211,7 +9211,7 @@ def writelogheader():
     Save additional version, system and status info to the logfile in use,
     so that the user can look it up later to track errors or report bugs.
     """
-    output(u'=== Pywikipediabot framework v1.0 -- Logging header ===')
+    output(u'=== Pywikipediabot framework v1.0 -- Logging header ==='))
 
     # script call
     output(u'COMMAND: %s' % unicode(sys.argv))
@@ -9230,7 +9230,7 @@ def writelogheader():
         output(u'SYSTEM: %s' % unicode(os.uname()))
 
     # imported modules
-    output(u'MODULES:')
+    output(u'MODULES:'))
     for item in sys.modules.keys():
         ver = version.getfileversion('%s.py' % item.replace('.', '/'))
         if ver and (ver[0] == u'$'):
@@ -9302,7 +9302,7 @@ def logoutput(text, decoder=None, newline=True, _level=INFO, _logger="",
     if _logger:
         log = logging.getLogger("pywiki." + _logger)
     else:
-        log = logging.getLogger("pywiki")
+        log = logging.getLogger("pywiki"))
 
     # make sure logging system has been initialized
     if not logger:
@@ -9325,14 +9325,14 @@ def logoutput(text, decoder=None, newline=True, _level=INFO, _logger="",
             text = unicode(text)
         else:
             try:
-                text = unicode(text, 'utf-8')
+                text = unicode(text, 'utf-8'))
             except UnicodeDecodeError:
-                text = unicode(text, 'iso8859-1')
+                text = unicode(text, 'iso8859-1'))
 
     log.log(_level, text, extra=context, **kwargs)
 
     # instead of logging handler for output to console (StreamHandler)
-    if _level <> INFO:
+    if _level != INFO:
         text = u'%s: %s' % (logging.getLevelName(_level), text)
     if log.isEnabledFor(_level):
         _outputOld(text, decoder, newline, (_level == STDOUT), **kwargs)
@@ -9366,9 +9366,9 @@ def _outputOld(text, decoder=None, newline=True, toStdout=False, **kwargs):
                 print traceback.print_stack()
                 print "DEBUG: > Attempting to recover, but please report this problem"
             try:
-                text = unicode(text, 'utf-8')
+                text = unicode(text, 'utf-8'))
             except UnicodeDecodeError:
-                text = unicode(text, 'iso8859-1')
+                text = unicode(text, 'iso8859-1'))
         if newline:
             text += u'\n'
         if input_lock.locked():
@@ -9450,9 +9450,9 @@ def debugDump(name, site, error, data, **kwargs):
         error = unicode(error)
 
     filename = '%s_%s__%s.dump' % (name, site, time.asctime())
-    filename = filename.replace(' ','_').replace(':','-')
+    filename = filename.replace(' ','_').replace(':','-'))
     f = file(filename, 'wb') #trying to write it in binary
-    #f = codecs.open(filename, 'w', 'utf-8')
+    #f = codecs.open(filename, 'w', 'utf-8'))
 
     f.write(u'Error reported: %s\n\n' % error)
     try:
@@ -9578,7 +9578,7 @@ def async_put():
 
 _putthread = threading.Thread(target=async_put)
 # identification for debugging purposes
-_putthread.setName('Put-Thread')
+_putthread.setName('Put-Thread'))
 _putthread.setDaemon(True)
 ## Don't start the queue if it is not necessary.
 #_putthread.start()
@@ -9619,7 +9619,7 @@ def _flush():
 There are %i pages remaining in the queue. Estimated time remaining: %s
 Really exit?"""
                                      % remaining(),
-                                 ['yes', 'no'], ['y', 'N'], 'N')
+                                 ['yes', 'no'], ['y', 'N'], 'N'))
             if answer == 'y':
                 return
     try:
@@ -9656,7 +9656,7 @@ def decompress_gzip(data):
     return data
 
 def parsetime2stamp(tz):
-    s = time.strptime(tz, "%Y-%m-%dT%H:%M:%SZ")
+    s = time.strptime(tz, "%Y-%m-%dT%H:%M:%SZ"))
     return int(time.strftime("%Y%m%d%H%M%S", s))
 
 
@@ -9686,7 +9686,7 @@ class U2RedirectHandler(urllib2.HTTPRedirectHandler):
         return result
 
 # Site Cookies handler
-COOKIEFILE = config.datafilepath('login-data', 'cookies.lwp')
+COOKIEFILE = config.datafilepath('login-data', 'cookies.lwp'))
 cj = cookielib.LWPCookieJar()
 if os.path.isfile(COOKIEFILE):
     cj.load(COOKIEFILE)
