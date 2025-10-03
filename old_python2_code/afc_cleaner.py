@@ -35,8 +35,6 @@ from dateutil.relativedelta import relativedelta
 import wikipedia as pywikibot
 import catlib, config, pagegenerators
 from pywikibot import i18n
-#DB CONFIG
-from db_handle import *
 
 # This is required for the text that is shown when you run this script
 # with the parameter -help.

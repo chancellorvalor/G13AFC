@@ -27,8 +27,6 @@ import logging.handlers
 from dateutil.relativedelta import relativedelta
 import pywikibot
 from pywikibot import pagegenerators
-#DB CONFIG
-from db_handle import *
 
 afc_notify_list = []
 
@@ -177,10 +175,9 @@ class CategoryListifyRobot:
         six_months_ago = ( 
           datetime.datetime.now() + relativedelta(months=-5) 
         ).timetuple()
-        logger.debug('Opened DB conn')
+        logger.debug('Starting G13 check (database tracking disabled)')
         #Take this out once the full authorization has been given for this bot
         potential_article = False
-        interested_insert = "INSERT INTO interested_notify (article,notified) VALUES (%s, %s)"
         for article in listOfArticles:
             if None != page_match.match(article.title()) or \
                None != page_match2.match(article.title()) :
@@ -193,22 +190,8 @@ class CategoryListifyRobot:
               creator = article.getCreator()[0]
               if edit_time < six_months_ago:
                 #Notify Creator
-                #Check for already nagged
-                cur = conn.cursor()
-                sql_string = "SELECT COUNT(*) FROM g13_records where " + \
-                  "article = %s" + \
-                  " and editor = %s;"
-                try:
-                  cur.execute(sql_string, (article.title(), creator))
-                except:
-                  logger.critical("Problem with %s" % article.title())
-                  continue
-                results = cur.fetchone()
-                cur = None
-                if results[0] > 0:
-                  #We already have notified this user
-                  logger.info(u"Already notifified (%s,%s)" %(creator, article.title()))
-                  continue
+                #Database tracking removed - will notify all eligible articles
+                logger.warning("Database tracking disabled - cannot check if user was already notified")
                 #Perform a null edit to get the creative Category juices flowing
                 logger.info('Starting to process %s' % article.title())
                 article.put(newtext = article.get(), comment="Null Edit")
@@ -247,26 +230,8 @@ class CategoryListifyRobot:
                     comment = summary,
                     force=True)
                 logger.debug('User Notified')
-                cur = conn.cursor()
-                sql_string = "INSERT INTO g13_records (article,editor)" + \
-                  "VALUES (%s, %s)" 
-                cur.execute(sql_string, (article.title(),creator))
-                conn.commit()
-                logger.debug('DB stored')
-                cur = None
-                #Notify Interested parties
-                #Get List of Editors to the page
-                editor_list = []
-                for rev in article.getVersionHistory():
-                    editor_list.append(rev[2])
-                #Now let's intersect these to see who we get to notify
-                intersection = set(editor_list) & set(afc_notify_list)
-                message = '\n==G13 Eligibility==\n[[%s]] has become eligible for G13. ~~~~' % article.title()
-                while intersection:
-                    editor = intersection.pop()
-                    cur = conn.cursor()
-                    cur.execute(interested_insert, (article.title(),editor))
-                    conn.commit()
+                #Database functionality removed - notification tracking disabled
+                logger.info('Notified %s about %s (tracking disabled)' % (creator, article.title()))
                 #Take this out when finished
         if False == potential_article:
             log_page = pywikibot.Page(
@@ -277,7 +242,6 @@ class CategoryListifyRobot:
             page_text = log_page.get() + msg
             log_page.put(newtext = page_text,comment="Date empty")
             logger.critical(msg)
-        conn.close()
 
 def main(*args):
     global catDB

@@ -9,18 +9,16 @@ This is a 10-year-old Wikipedia bot originally written for Python 2, now moderni
 The project was successfully migrated from Python 2 to Python 3:
 
 1. **Modern Pywikibot**: Replaced the old Python 2 pywikibot framework with the modern Python 3 version (10.5.0)
-2. **Database Module**: Created `db_handle.py` to provide MySQL database connectivity
-3. **Dependencies**: Installed python-dateutil, mysqlclient, and modern pywikibot
-4. **Code Updates**: Fixed Python 2/3 compatibility issues in the main bot files
+2. **Dependencies**: Installed python-dateutil and modern pywikibot
+3. **Code Updates**: Fixed Python 2/3 compatibility issues in the main bot files
+4. **Simplified Architecture**: Removed MySQL database dependencies for a cleaner setup
 
 ## Project Structure
 
-- `g13_nudge_bot.py` - Main bot for notifying users about G13 candidates
-- `g13_nom_bot.py` - Bot for nominating pages for G13 deletion
-- `g13_db_maintenance.py` - Database cleanup and maintenance
-- `db_handle.py` - MySQL database connection module
+- `g13_nudge_bot.py` - Main bot for notifying users about G13 candidates (Python 3 compatible)
+- `g13_interested_notify.py` - Interested users notification script (disabled - requires database)
 - `user-config.py` - User configuration for bot credentials
-- `g13.sql` - Database schema for G13 tracking
+- `old_python2_code/` - Archive directory containing legacy Python 2 scripts
 
 ## How to Use
 
@@ -32,22 +30,7 @@ Edit `user-config.py` to add your Wikipedia bot username:
 usernames['wikipedia']['en'] = 'YourBotUsername'
 ```
 
-### 2. Configure Database (Optional)
-
-The bot uses MySQL to track G13 candidates. Edit `db_handle.py` to configure:
-
-```python
-DB_HOST = 'localhost'
-DB_USER = 'wikiuser'  
-DB_PASS = 'your_password'
-```
-
-Create the database:
-```bash
-mysql DATABASE < g13.sql
-```
-
-### 3. Run the Bot
+### 2. Run the Bot
 
 The bot accepts category names to process:
 
@@ -60,10 +43,11 @@ For example:
 python g13_nudge_bot.py -from:AfC_submissions_by_date/February_2009
 ```
 
-### 4. Other Bots
+### 3. Legacy Scripts
 
-- **Nomination Bot**: `python g13_nom_bot.py`
-- **Database Maintenance**: `python g13_db_maintenance.py`
+Legacy Python 2 scripts have been moved to `old_python2_code/` directory:
+- `g13_nom_bot.py` - Nomination bot (requires database and Python 2 compatibility)
+- `afc_cleaner.py` - AFC cleaner script (requires database and Python 2 compatibility)
 
 ## Current Status
 
@@ -72,21 +56,20 @@ python g13_nudge_bot.py -from:AfC_submissions_by_date/February_2009
 ✅ Dependencies installed
 ✅ Basic functionality working
 ✅ All deprecation warnings fixed
+✅ Database dependencies removed for simplified setup
 
-⚠️ MySQL database not configured (optional - see below)
 ⚠️ Wikipedia bot credentials need to be configured in user-config.py
-
-## Database Notes
-
-The MySQL database connection warnings you see are **expected and normal**. The database is optional and only needed for advanced features like tracking G13 nomination history.
-
-**Options for database:**
-1. **No database** - Bot works fine without it for basic operations
-2. **External MySQL** - Use services like PlanetScale, AWS RDS, or Railway (Replit doesn't have built-in MySQL)
-3. **Convert to PostgreSQL** - Replit has built-in PostgreSQL (would require code changes)
 
 ## Notes
 
 - The original Python 2 code has been backed up to `old_python2/` directory
 - Some advanced features may need additional testing with modern pywikibot APIs
-- The bot is fully functional for basic Wikipedia operations without a database
+
+## Features Disabled Without Database
+
+The following features are **disabled** after database removal:
+- **Notification tracking**: Bot cannot check if a user was already notified, so it may send duplicate notifications
+- **Interested user notifications**: The g13_interested_notify.py script is non-functional
+- **Database maintenance**: The g13_db_maintenance.py script has been removed
+
+The core G13 notification functionality still works, but without tracking of previous notifications.
