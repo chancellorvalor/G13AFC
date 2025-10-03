@@ -71,12 +71,22 @@ python g13_nudge_bot.py -from:AfC_submissions_by_date/February_2009
 ✅ Modern pywikibot (10.5.0) integrated
 ✅ Dependencies installed
 ✅ Basic functionality working
+✅ All deprecation warnings fixed
 
-⚠️ MySQL database not configured (optional for full functionality)
+⚠️ MySQL database not configured (optional - see below)
 ⚠️ Wikipedia bot credentials need to be configured in user-config.py
+
+## Database Notes
+
+The MySQL database connection warnings you see are **expected and normal**. The database is optional and only needed for advanced features like tracking G13 nomination history.
+
+**Options for database:**
+1. **No database** - Bot works fine without it for basic operations
+2. **External MySQL** - Use services like PlanetScale, AWS RDS, or Railway (Replit doesn't have built-in MySQL)
+3. **Convert to PostgreSQL** - Replit has built-in PostgreSQL (would require code changes)
 
 ## Notes
 
-- The original Python 2 code has been backed up with `.bak` and `_old` extensions
+- The original Python 2 code has been backed up to `old_python2/` directory
 - Some advanced features may need additional testing with modern pywikibot APIs
-- Database features require MySQL server setup
+- The bot is fully functional for basic Wikipedia operations without a database
