@@ -23,6 +23,7 @@ __version__ = '$Id$'
 #
 
 import os, re, pickle, bz2, time, datetime, sys, logging
+import logging.handlers
 from dateutil.relativedelta import relativedelta
 import wikipedia as pywikibot
 import catlib, config, pagegenerators
@@ -161,9 +162,9 @@ class CategoryListifyRobot:
         page_text = pywikibot.Page(pywikibot.getSite(),
                 'User:HasteurBot/G13 OptIn Notifications').get()
         afc_notify_list = re.findall('\#\[\[User\:(?P<name>.*)\]\]',page_text)
-        listOfArticles = self.cat.articlesList(recurse = self.recurse)
+        listOfArticles = list(self.cat.articlesList(recurse = self.recurse))
         if self.subCats:
-            listOfArticles += self.cat.subcategoriesList()
+            listOfArticles += list(self.cat.subcategoriesList())
         listString = ""
         page_match = re.compile('Wikipedia talk:Articles for creation/')
         page_match2 = re.compile('Draft:')
@@ -305,6 +306,7 @@ def main(*args):
     # If this is set to true then the custom edit summary given for removing
     # categories from articles will also be used as the deletion reason.
     useSummaryForDeletion = True
+    global catDB
     catDB = CategoryDatabase()
     action = None
     sort_by_last_name = False

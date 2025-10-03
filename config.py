@@ -568,7 +568,7 @@ for _arg in __sys.argv[1:]:
         _verbose = True
         break
 if _verbose:
-    print "Config.py"
+    print("Config.py")
 
 # Get the names of all known families, and initialize
 # with empty dictionaries
@@ -586,7 +586,7 @@ for _filename in os.listdir(os.path.join(_base_dir, 'families')):
 # Store current variables and their types.
 _glv = {}
 _glv.update(globals())
-_gl = _glv.keys()
+_gl = list(_glv.keys())
 _tp = {}
 for _key in _gl:
     if _key[0] != '_':
@@ -602,12 +602,13 @@ for _filename in _fns:
         _filemode = _filestatus[0]
         _fileuid = _filestatus[4]
         if __sys.platform == 'win32' or _fileuid in [os.getuid(), 0]:
-            if __sys.platform == 'win32' or _filemode & 002 == 0:
-                execfile(_filename)
+            if __sys.platform == 'win32' or _filemode & 0o002 == 0:
+                with open(_filename) as _f:
+                    exec(compile(_f.read(), _filename, 'exec'), globals())
             else:
-                print "WARNING: Skipped '%s': writeable by others."%_filename
+                print("WARNING: Skipped '%s': writeable by others."%_filename)
         else:
-            print "WARNING: Skipped '%s': owned by someone else."%_filename
+            print("WARNING: Skipped '%s': owned by someone else."%_filename)
 
 # Test for obsoleted and/or unknown variables.
 for _key, _val in globals().items():
@@ -623,12 +624,12 @@ for _key, _val in globals().items():
         elif ot is int and (nt is float or nt is bool):
             pass
         else:
-            print "WARNING: Type of '%s' changed"%_key
-            print "       Was: ",ot
-            print "       Now: ",nt
+            print("WARNING: Type of '%s' changed"%_key)
+            print("       Was: ",ot)
+            print("       Now: ",nt)
         del nt, ot
     else:
-        print "WARNING: Configuration variable %r is defined but unknown. Misspelled?" %_key
+        print("WARNING: Configuration variable %r is defined but unknown. Misspelled?" %_key)
 
 # Fix up default console_encoding
 if console_encoding is None:
@@ -641,8 +642,8 @@ if console_encoding is None:
 if transliteration_target == 'not set':
     if __sys.platform == 'win32':
         transliteration_target = console_encoding
-        print "WARNING: Running on Windows and transliteration_target is not set."
-        print "Please see http://www.mediawiki.org/wiki/Manual:Pywikipediabot/Windows"
+        print("WARNING: Running on Windows and transliteration_target is not set.")
+        print("Please see http://www.mediawiki.org/wiki/Manual:Pywikipediabot/Windows")
     else:
         transliteration_target = None
 elif transliteration_target in ('None', 'none'):
@@ -651,11 +652,11 @@ elif transliteration_target in ('None', 'none'):
 # Save base_dir for use by other modules
 base_dir = _base_dir
 if _verbose:
-    print "- base_dir: ", base_dir
+    print("- base_dir: ", base_dir)
 
 # Exit message
 if _verbose:
-    print "- done."
+    print("- done.")
 
 #
 # When called as main program, list all configuration variables
@@ -673,23 +674,25 @@ if __name__ == "__main__":
         elif _arg.startswith("-dir:"):
             pass
         else:
-            print "Unknown arg %s ignored"%_arg
-    _k = globals().keys()
-    _k.sort()
+            print("Unknown arg %s ignored"%_arg)
+    _k = sorted(globals().keys())
     for _name in _k:
         if _name[0] != '_':
             if not type(globals()[_name]) in [types.FunctionType, types.ModuleType]:
                 try:
                     if _all or _glv[_name] != globals()[_name]:
-                        print _name, "=", repr(globals()[_name])
+                        print(_name, "=", repr(globals()[_name]))
                 except KeyError:
-                    print _name, "=(new)=", repr(globals()[_name])
+                    print(_name, "=(new)=", repr(globals()[_name]))
 
 # cleanup all locally-defined variables
-for __var in globals().keys():
+for __var in list(globals().keys()):
     if __var.startswith("_") and not __var.startswith("__"):
         del __sys.modules[__name__].__dict__[__var]
 
-del __var, __sys
+try:
+    del __var, __sys
+except NameError:
+    pass
 del os, re
 
