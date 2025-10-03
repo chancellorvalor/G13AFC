@@ -146,8 +146,8 @@ class CategoryListifyRobot:
         self.editSummary = editSummary
         self.overwrite = overwrite
         self.showImages = showImages
-        self.site = pywikibot.getSite()
-        self.cat = catlib.Category(self.site, 'Category:' + catTitle)
+        self.site = pywikibot.Site()
+        self.cat = pywikibot.Category(self.site, 'Category:' + catTitle)
         self.catTitle = catTitle
         self.list = pywikibot.Page(self.site, listTitle)
         self.subCats = subCats
@@ -156,7 +156,7 @@ class CategoryListifyRobot:
 
     def run(self):
         global logger
-        page_text = pywikibot.Page(pywikibot.getSite(),
+        page_text = pywikibot.Page(pywikibot.Site(),
                 'User:HasteurBot/G13 OptIn Notifications').get()
         afc_notify_list = re.findall('\#\[\[User\:(?P<name>.*)\]\]',page_text)
         listOfArticles = list(self.cat.articlesList(recurse = self.recurse))
