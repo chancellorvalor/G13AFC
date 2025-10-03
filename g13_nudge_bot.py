@@ -25,9 +25,8 @@ __version__ = '$Id$'
 import os, re, pickle, bz2, time, datetime, sys, logging
 import logging.handlers
 from dateutil.relativedelta import relativedelta
-import wikipedia as pywikibot
-import catlib, config, pagegenerators
-from pywikibot import i18n
+import pywikibot
+from pywikibot import pagegenerators
 #DB CONFIG
 from db_handle import *
 
@@ -313,7 +312,7 @@ def main(*args):
     restore = False
     create_pages = False
     action = 'listify'
-    for arg in pywikibot.handleArgs(*args):
+    for arg in pywikibot.handle_args(*args):
         if arg.startswith('-from:'):
             oldCatTitle = arg[len('-from:'):].replace('_', ' ')
             fromGiven = True

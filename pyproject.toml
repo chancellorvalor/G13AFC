@@ -7,4 +7,5 @@ dependencies = [
     "httpsproxy-urllib2>=1.0",
     "mysqlclient>=2.2.7",
     "python-dateutil>=2.9.0.post0",
+    "pywikibot>=10.5.0",
 ]

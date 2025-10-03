@@ -3137,11 +3137,11 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
         # TODO: parse XML using an actual XML parser instead of regex!
             r = re.compile("\<revision\>.*?\<id\>(?P<id>.*?)\<\/id\>.*?\<timestamp\>(?P<timestamp>.*?)\<\/timestamp\>.*?\<(?:ip|username)\>(?P<user>.*?)\</(?:ip|username)\>.*?\<text.*?\>(?P<content>.*?)\<\/text\>",re.DOTALL)
         #r = re.compile("\<revision\>.*?\<timestamp\>(.*?)\<\/timestamp\>.*?\<(?:ip|username)\>(.*?)\<",re.DOTALL)
-            return [  (match.group('id'),
-                       match.group('timestamp'),
-                       unescape(match.group('user'),
-                       unescape(match.group('content'))
-                    for match in r.finditer(data)  ]
+            return [(match.group('id'),
+                     match.group('timestamp'),
+                     unescape(match.group('user')),
+                     unescape(match.group('content')))
+                    for match in r.finditer(data)]
 
         # Load history informations by API query.
         return self._getVersionHistory(getAll=getAll, skipFirst=skipFirst,
@@ -3334,9 +3334,9 @@ u'Page %s is semi-protected. Getting edit page to find out if we are allowed to 
         address = self.site().move_address()
         token = self.site().getToken(sysop = sysop)
         predata = {
-            'wpOldTitle': self.title().encode(self.site().encoding(),
-            'wpNewTitle': newtitle.encode(self.site().encoding(),
-            'wpReason': reason.encode(self.site().encoding(),
+            'wpOldTitle': self.title().encode(self.site().encoding()),
+            'wpNewTitle': newtitle.encode(self.site().encoding()),
+            'wpReason': reason.encode(self.site().encoding()),
         }
         if deleteAndMove:
             predata['wpDeleteAndMove'] = self.site().mediawiki_message('delete_and_move_confirm')

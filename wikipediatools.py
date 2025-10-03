@@ -38,7 +38,7 @@ def get_base_dir():
                     base_dir = os.path.split(
                                 sys.modules['wikipediatools'].__file__)[0]
                 except KeyError:
-                    print sys.modules
+                    print(sys.modules)
                     base_dir = '.'
     if not os.path.isabs(base_dir):
         base_dir = os.path.normpath(os.path.join(os.getcwd(), base_dir))
